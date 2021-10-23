@@ -1,0 +1,10 @@
+name: UniverseCore
+version: ${project.version}
+main: id.universenetwork.universecore.UniverseCore
+api-version: 1.16
+authors: [ rajaopak ]
+description: UniverseCore plugin for UniverseNetwork
+website: https://universenetwork.id/
+commands:
+  universe:
+    aliases: [uni]
