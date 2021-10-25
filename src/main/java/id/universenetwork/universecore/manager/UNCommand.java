@@ -1,5 +1,7 @@
 package id.universenetwork.universecore.manager;
 
+import id.universenetwork.universecore.enums.Message;
+import id.universenetwork.universecore.manager.file.MessageData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -27,8 +29,8 @@ public abstract class UNCommand implements CommandExecutor, TabCompleter {
         return commandInfo;
     }
 
-    public void execute(Player p, String[] args) {}
-    public void execute(CommandSender s, String[] args) {}
+    public void execute(Player player, String[] args) {}
+    public void execute(CommandSender sender, String[] args) {}
     public abstract List<String> TabCompleter(CommandSender sender, Command command, String s, String[] args);
 
 
@@ -37,7 +39,7 @@ public abstract class UNCommand implements CommandExecutor, TabCompleter {
         if (!commandInfo.permission().isEmpty()) {
             if (!sender.hasPermission(commandInfo.permission())) {
                 sendCentredMessage(sender,"&b");
-                sendCentredMessage(sender,"&cYou don't have permission to execute this command!");
+                sendCentredMessage(sender, MessageData.getInstance().getString(Message.NOPERM));
                 sendCentredMessage(sender,"&b");
                 return true;
             }
@@ -46,14 +48,14 @@ public abstract class UNCommand implements CommandExecutor, TabCompleter {
         int arg = commandInfo.argsLength();
 
         if (args.length > arg) {
-            sender.sendMessage(colors("&cToo many arguments!"));
+            sender.sendMessage(colors(MessageData.getInstance().getString(Message.TOOMANYARG)));
             sender.sendMessage(colors("&6Usage: &e" + commandInfo.usage()));
             return true;
         }
 
         if (commandInfo.onlyPlayer()) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(colors("&cYou must be a player to execute the command!"));
+                sender.sendMessage(colors(MessageData.getInstance().getString(Message.ONLYPLAYER)));
                 return true;
             }
             execute((Player) sender, args);

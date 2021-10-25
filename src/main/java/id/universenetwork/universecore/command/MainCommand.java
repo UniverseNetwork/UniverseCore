@@ -1,5 +1,6 @@
 package id.universenetwork.universecore.command;
 
+import id.universenetwork.universecore.enums.Message;
 import id.universenetwork.universecore.manager.CommandInfo;
 import id.universenetwork.universecore.manager.UNCommand;
 import id.universenetwork.universecore.manager.file.ConfigData;
@@ -18,10 +19,12 @@ public class MainCommand extends UNCommand {
 
     @Override
     public void execute(CommandSender s, String[] args) {
-        sendCentredMessage(s,"&a");
-        sendCentredMessage(s,"&bUniverse&eCore");
-        sendCentredMessage(s,"&aMade by &erajaopak");
-        sendCentredMessage(s,"&a");
+        if (args.length == 0) {
+            sendCentredMessage(s,"&a");
+            sendCentredMessage(s,"&bUniverse&eCore");
+            sendCentredMessage(s,"&aMade by &erajaopak");
+            sendCentredMessage(s,"&a");
+        }
 
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
@@ -29,7 +32,7 @@ public class MainCommand extends UNCommand {
                     ConfigData.getInstance().reload();
                     MessageData.getInstance().reload();
                     sendCentredMessage(s,"&a");
-                    sendCentredMessage(s,"&aSuccessfully reloading plugin!");
+                    sendCentredMessage(s,MessageData.getInstance().getString(Message.RELOAD));
                     sendCentredMessage(s,"&a");
                 }
             }
@@ -40,8 +43,7 @@ public class MainCommand extends UNCommand {
     public List<String> TabCompleter(CommandSender sender, Command command, String s, String[] args) {
         if (args.length == 1) {
             if (sender.hasPermission("universenetwork.reload")) {
-                List<String> arg1 = new ArrayList<>(Collections.singletonList("reload"));
-                return arg1;
+                return new ArrayList<>(Collections.singletonList("reload"));
             }
         }
         return Collections.emptyList();

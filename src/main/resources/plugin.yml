@@ -8,3 +8,13 @@ website: https://universenetwork.id/
 commands:
   universe:
     aliases: [uni]
+  kaboom:
+    aliases: [boom, ukaboom, uboom]
+  santet:
+    aliases: [usantet]
+  whereis:
+    aliases: [whereis, uwhereis, uwis, wis]
+  toggledrop:
+    aliases: [td, utd, utoggledrop]
+  ping:
+    aliases: [uping]
