@@ -1,6 +1,6 @@
-package id.universenetwork.universecore.enums;
+package id.universenetwork.universecore.Bukkit.enums;
 
-public enum Message {
+public enum MessageEnum {
 
     PREFIX("prefix"),
     NOPERM("no-perm"),
@@ -22,7 +22,7 @@ public enum Message {
 
     private final String path;
 
-    Message(String path) {
+    MessageEnum(String path) {
         this.path = path;
     }
 

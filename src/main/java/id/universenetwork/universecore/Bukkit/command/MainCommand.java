@@ -1,21 +1,23 @@
-package id.universenetwork.universecore.command;
+package id.universenetwork.universecore.Bukkit.command;
 
-import id.universenetwork.universecore.enums.Message;
-import id.universenetwork.universecore.manager.CommandInfo;
-import id.universenetwork.universecore.manager.UNCommand;
-import id.universenetwork.universecore.manager.file.ConfigData;
-import id.universenetwork.universecore.manager.file.MessageData;
-import org.bukkit.command.Command;
+import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
+import id.universenetwork.universecore.Bukkit.manager.UNCommand;
+import id.universenetwork.universecore.Bukkit.manager.file.ConfigData;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static id.universenetwork.universecore.utils.CenterMessage.sendCentredMessage;
+import static id.universenetwork.universecore.Bukkit.utils.CenterMessage.sendCentredMessage;
 
-@CommandInfo(name = "universe", argsLength = 1, onlyPlayer = false, usage = "/universe")
 public class MainCommand extends UNCommand {
+
+    public MainCommand() {
+        super("universecore", null, "/universecore", null, 1, false,
+                "uni", "universe", "unc");
+    }
 
     @Override
     public void execute(CommandSender s, String[] args) {
@@ -32,7 +34,7 @@ public class MainCommand extends UNCommand {
                     ConfigData.getInstance().reload();
                     MessageData.getInstance().reload();
                     sendCentredMessage(s,"&a");
-                    sendCentredMessage(s,MessageData.getInstance().getString(Message.RELOAD));
+                    sendCentredMessage(s,MessageData.getInstance().getString(MessageEnum.RELOAD));
                     sendCentredMessage(s,"&a");
                 }
             }
@@ -40,11 +42,12 @@ public class MainCommand extends UNCommand {
     }
 
     @Override
-    public List<String> TabCompleter(CommandSender sender, Command command, String s, String[] args) {
+    public List<String> TabCompleter(CommandSender sender, String s, String[] args) {
         if (args.length == 1) {
             if (sender.hasPermission("universenetwork.reload")) {
                 return new ArrayList<>(Collections.singletonList("reload"));
             }
+            return Collections.emptyList();
         }
         return Collections.emptyList();
     }

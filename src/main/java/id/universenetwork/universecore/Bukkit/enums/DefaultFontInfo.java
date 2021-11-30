@@ -1,4 +1,4 @@
-package id.universenetwork.universecore.enums;
+package id.universenetwork.universecore.Bukkit.enums;
 
 public enum DefaultFontInfo{
     A('A', 5),

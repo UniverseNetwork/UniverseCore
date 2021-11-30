@@ -1,21 +1,26 @@
-prefix: "&bUniverse&eCore &8&l> &r"
-no-perm: "&cYou don't have permission to execute this command!"
-only-player: "&cYou must be a player to execute the command!"
-too-many-args: "&cToo many arguments!"
-reload: "&aSuccessfully reloading plugin!"
-santet-title: "&c&lSANTET"
-santet-success: "&7Berhasil menSantet &e%player%&7!"
-santet-all-player: "&7Berhasil menSantet &aSemua Player&7!"
-player-not-found: "&cNo player found!"
-kaboom-title: "&a&lKABOOM"
-kaboom-success: "&7Berhasil mengKaboom&e %player%%&7!"
-ping-message: "&7Ping kamu adalah &e%ping%ms"
-ping-other-message: "&7Ping &a%player% &7adalah &e%ping%ms"
-ping-console-message: "&7Ping mu &e0ms&7. kamu adalah console!"
-
+prefix: '&bUniverse&eCore &8&l> &r'
+no-perm: '&cYou don''t have permission to execute this command!'
+only-player: '&cYou must be a player to execute the command!'
+too-many-args: '&cToo many arguments!'
+reload: '&aSuccessfully reloading plugin!'
+santet-title: '&c&lSANTET'
+santet-success: '&7Berhasil menSantet &e%player%&7!'
+santet-all-player: '&7Berhasil menSantet &aSemua Player&7!'
+player-not-found: '&cNo player found!'
+kaboom-title: '&a&lKABOOM'
+kaboom-success: '&7Berhasil mengKaboom&e %player%&7!'
+ping-message: '&7Ping kamu adalah &e%ping%ms'
+ping-other-message: '&7Ping &a%player% &7adalah &e%ping%ms'
+ping-console-message: '&7Ping mu &e0ms&7. kamu adalah console!'
+toggledrop-on: '&7ToggleDrop Item &adiaktifkan&7!'
+toggledrop-off: '&7ToggleDrop Item &adinonaktifkan&7!'
 whereis-message:
-  - "&8&m==========&bInfomation for &a%player% &8=========="
-  - "&abWorld&8: %world%"
-  - "&abLocation&8: %x% %y% %z%"
-  - "&abYaw&8: %yaw%"
-  - "&abPitch&8: %pitch%"
+  - '&8&m==========&b Infomation for &a%player% &8&m=========='
+  - '&bWorld&8: &e%world%'
+  - '&bLocation&8:'
+  - '    &ex&7:&a%x%'
+  - '    &ey&7:&a%y%'
+  - '    &ez&7:&a%z%'
+  - '&bYaw&8: &7%yaw%'
+  - '&bPitch&8: &7%pitch%'
+  - '&8&m=========================================='

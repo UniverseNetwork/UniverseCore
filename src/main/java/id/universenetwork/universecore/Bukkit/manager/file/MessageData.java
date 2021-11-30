@@ -1,8 +1,8 @@
-package id.universenetwork.universecore.manager.file;
+package id.universenetwork.universecore.Bukkit.manager.file;
 
-import id.universenetwork.universecore.UniverseCore;
-import id.universenetwork.universecore.enums.Message;
-import id.universenetwork.universecore.manager.ConfigManager;
+import id.universenetwork.universecore.Bukkit.UniverseCore;
+import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
+import id.universenetwork.universecore.Bukkit.manager.ConfigManager;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 
@@ -28,14 +28,15 @@ public class MessageData {
         message.saveConfig();
     }
 
-    public String getString(Message e) {
+    public String getString(MessageEnum e) {
         return ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(message.getConfig().getString(e.getPath())));
     }
 
-    public String getStringList(Message e) {
+    public String getStringList(MessageEnum e) {
+        StringBuilder sb = new StringBuilder();
         for (String a : MessageData.message.getConfig().getStringList(e.getPath())) {
             return ChatColor.translateAlternateColorCodes('&', a);
         }
-        return null;
+        return sb.toString();
     }
 }

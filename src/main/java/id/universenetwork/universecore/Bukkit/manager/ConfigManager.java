@@ -1,6 +1,6 @@
-package id.universenetwork.universecore.manager;
+package id.universenetwork.universecore.Bukkit.manager;
 
-import id.universenetwork.universecore.UniverseCore;
+import id.universenetwork.universecore.Bukkit.UniverseCore;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

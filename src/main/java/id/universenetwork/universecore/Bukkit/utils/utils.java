@@ -1,7 +1,7 @@
-package id.universenetwork.universecore.utils;
+package id.universenetwork.universecore.Bukkit.utils;
 
-import id.universenetwork.universecore.enums.Message;
-import id.universenetwork.universecore.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 public class utils {
 
     public static String getPrefix() {
-        return MessageData.getInstance().getString(Message.PREFIX);
+        return MessageData.getInstance().getString(MessageEnum.PREFIX);
     }
 
     public static String colors(String msg) {

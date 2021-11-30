@@ -1,65 +1,28 @@
-package id.universenetwork.universecore;
+package id.universenetwork.universecore.Bungee;
 
-import id.universenetwork.universecore.manager.UNCommand;
-import id.universenetwork.universecore.manager.file.ConfigData;
-import id.universenetwork.universecore.manager.file.MessageData;
+import id.universenetwork.universecore.Bungee.manager.ConfigManager;
+import net.md_5.bungee.api.plugin.Plugin;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
-import org.bukkit.plugin.java.JavaPlugin;
-import org.reflections.Reflections;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Objects;
+public class UniverseCore extends Plugin {
 
-public final class UniverseCore extends JavaPlugin {
+    private static UniverseCore Instance;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        this.register();
-        Bukkit.getLogger().info("\nUniverseCore Has been enabled!\n" +
-                "source: https://github.com/UniverseNetwork/UniverseCore\n" +
-                "website: https://universenetwork.id/");
-        this.onEnableMessage();
+        configManager = new ConfigManager(false);
+        onEnableMessage();
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
-        this.saveAllConfig();
-        this.onDisableMessage();
+        onDisableMessage();
     }
 
-    public void saveAllConfig() {
-        ConfigData.getInstance().saveConfig();
-        MessageData.getInstance().saveConfig();
-    }
-
-    public void register() {
-        ConfigData.cfg.saveDefaultConfig();
-        MessageData.message.saveDefaultConfig();
-
-        String packageName = getClass().getPackage().getName();
-
-        for (Class<? extends UNCommand> clazz : new Reflections(packageName + ".command").getSubTypesOf(UNCommand.class)) {
-            try {
-                UNCommand unCommand = clazz.getDeclaredConstructor().newInstance();
-                Objects.requireNonNull(getCommand(unCommand.getCommandInfo().name())).setExecutor(unCommand);
-                Objects.requireNonNull(getCommand(unCommand.getCommandInfo().name())).setTabCompleter(unCommand);
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-
-        for (Class<? extends UNCommand> clazz : new Reflections(packageName + ".listener").getSubTypesOf(UNCommand.class)) {
-            try {
-                Listener listener = (Listener) clazz.getDeclaredConstructor().newInstance();
-                getServer().getPluginManager().registerEvents(listener,this);
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+     public static UniverseCore getInstance() {
+        return Instance;
+     }
 
     public void onEnableMessage() {
         Bukkit.getLogger().info("");
@@ -92,5 +55,4 @@ public final class UniverseCore extends JavaPlugin {
         Bukkit.getLogger().info("§8╚══════════════════════════════════════════════════════════════════╝");
         Bukkit.getLogger().info("");
     }
-
 }

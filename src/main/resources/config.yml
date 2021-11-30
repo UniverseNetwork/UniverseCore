@@ -1,2 +1,18 @@
 # test
 # nothing here
+
+JoinMessage:
+  Enabled: true
+  Centered: true
+  Message:
+    - ' '
+    - '&e%player% &aJoin &bthe server!%'
+    - ' '
+
+QuitMessage:
+  Enabled: true
+  Centered: true
+  Message:
+    - ' '
+    - '&e%player% &cQuit &bthe server!%'
+    - ' '
