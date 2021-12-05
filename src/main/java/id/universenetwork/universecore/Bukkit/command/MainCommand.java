@@ -4,11 +4,13 @@ import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.file.ConfigData;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static id.universenetwork.universecore.Bukkit.utils.CenterMessage.sendCentredMessage;
 
@@ -31,10 +33,17 @@ public class MainCommand extends UNCommand {
         if (args.length == 1) {
             if (args[0].equalsIgnoreCase("reload")) {
                 if (s.hasPermission("universenetwork.reload")) {
-                    ConfigData.getInstance().reload();
-                    MessageData.getInstance().reload();
+                    long millis = System.currentTimeMillis();
+                    try {
+                        ConfigData.getInstance().reload();
+                        MessageData.getInstance().reload();
+                        Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("UniverseCore")).onDisable();
+                        Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("UniverseCore")).onEnable();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     sendCentredMessage(s,"&a");
-                    sendCentredMessage(s,MessageData.getInstance().getString(MessageEnum.RELOAD));
+                    sendCentredMessage(s,MessageData.getInstance().getString(MessageEnum.RELOAD) + " (Took " + (System.currentTimeMillis() - millis) + "ms)");
                     sendCentredMessage(s,"&a");
                 }
             }

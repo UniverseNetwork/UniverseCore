@@ -1,0 +1,5 @@
+name: UniverseCore
+main: id.universenetwork.universecore.Bungee.UniverseCore
+author: [ rajaopak ]
+description: UniverseCore plugin for UniverseNetwork
+version: ${project.version}

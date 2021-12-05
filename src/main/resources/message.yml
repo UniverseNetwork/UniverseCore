@@ -12,8 +12,15 @@ kaboom-success: '&7Berhasil mengKaboom&e %player%&7!'
 ping-message: '&7Ping kamu adalah &e%ping%ms'
 ping-other-message: '&7Ping &a%player% &7adalah &e%ping%ms'
 ping-console-message: '&7Ping mu &e0ms&7. kamu adalah console!'
-toggledrop-on: '&7ToggleDrop Item &adiaktifkan&7!'
-toggledrop-off: '&7ToggleDrop Item &adinonaktifkan&7!'
+toggledrop-on: "&7ToggleDrop Item &adiaktifkan&7!"
+toggledrop-off: "&7ToggleDrop Item &cdinonaktifkan&7!"
+gamemode-creative: "&7Set your gamemode from &e%gamemode% &7to &aCREATIVE&7!"
+gamemode-survival: "&7Set your gamemode from &e%gamemode% &7to &aSURVIVAL&7!"
+gamemode-adventure: "&7Set your gamemode from &e%gamemode% &7to &aADVENTURE&7!"
+gamemode-spectator: "&7Set your gamemode from &e%gamemode% &7to &aSPECTATOR&7!"
+already-in-gamemode-perplayer: "&7You already in gamemode &e%gamemode%"
+already-in-gamemode-target: "&6%player% &7already in gamemode %gamemode%"
+invalid-item: "&cInvalid item!"
 whereis-message:
   - '&8&m==========&b Infomation for &a%player% &8&m=========='
   - '&bWorld&8: &e%world%'

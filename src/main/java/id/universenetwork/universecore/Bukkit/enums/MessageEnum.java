@@ -18,7 +18,16 @@ public enum MessageEnum {
     WHEREISMSG("whereis-message"),
     PINGMSG("ping-message"),
     PINGCONSOLEMSG("ping-console-message"),
-    PINGMSGO("ping-other-message");
+    PINGMSGO("ping-other-message"),
+    GMC("gamemode-creative"),
+    GMS("gamemode-survival"),
+    GMA("gamemode-adventure"),
+    GMSP("gamemode-spectator"),
+    ALRDINGMPPLY("already-in-gamemode-perplayer"),
+    ALRDINGMPTRG("already-in-gamemode-target"),
+    INVALID_ITEM("invalid-item"),
+    WLON("whitelist-on"),
+    WLOFF("whitelist-off");
 
     private final String path;
 

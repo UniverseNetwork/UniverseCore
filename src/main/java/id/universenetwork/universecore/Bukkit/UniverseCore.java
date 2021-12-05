@@ -1,26 +1,35 @@
 package id.universenetwork.universecore.Bukkit;
 
+import id.universenetwork.universecore.Bukkit.listener.JoinQuitListener;
+import id.universenetwork.universecore.Bukkit.listener.ToggleDropListener;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.file.ConfigData;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.reflections.Reflections;
-
-import java.lang.reflect.InvocationTargetException;
 
 public final class UniverseCore extends JavaPlugin {
+
+    private static UniverseCore instance;
+
+    public static UniverseCore getInstance() {
+        return UniverseCore.instance;
+    }
 
     @Override
     public void onEnable() {
         // Plugin startup logic
+        long start = System.currentTimeMillis();
+        UniverseCore.instance = this;
         this.register();
-        UNCommand.register();
         System.out.println("\nUniverseCore Has been enabled!\n" +
                 "source: https://github.com/UniverseNetwork/UniverseCore\n" +
                 "website: https://universenetwork.id/");
         this.onEnableMessage();
+        System.out.println("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
+        System.out.println();
+        System.out.println();
     }
 
     @Override
@@ -39,40 +48,27 @@ public final class UniverseCore extends JavaPlugin {
         ConfigData.cfg.saveDefaultConfig();
         MessageData.message.saveDefaultConfig();
 
-        String packageName = getClass().getPackage().getName();
-
-        /*for (Class<? extends UNCommand> clazz : new Reflections(packageName + ".command").getSubTypesOf(UNCommand.class)) {
-            try {
-                UNCommand unCommand = clazz.getDeclaredConstructor().newInstance();
-                Objects.requireNonNull(getCommand(unCommand.getCommandInfo().name())).setExecutor(unCommand);
-                Objects.requireNonNull(getCommand(unCommand.getCommandInfo().name())).setTabCompleter(unCommand);
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }*/
-
-        for (Class<? extends Listener> clazz : new Reflections(packageName + ".listener").getSubTypesOf(Listener.class)) {
-            try {
-                Listener listener = clazz.getDeclaredConstructor().newInstance();
-                getServer().getPluginManager().registerEvents(listener,this);
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException | NoSuchMethodException | NullPointerException e) {
-                e.printStackTrace();
-            }
-        }
+        UNCommand.register();
+        utils.registerListener(new JoinQuitListener(),
+                new ToggleDropListener());
     }
 
     public void onEnableMessage() {
         Bukkit.getLogger().info("");
         Bukkit.getLogger().info("§8╔══════════════════════════════════════════════════════════════════╗");
         Bukkit.getLogger().info("§8║                                                                  ║");
-        Bukkit.getLogger().info("§8║                        §bUniverse§eNetwork                     §8║");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                         §aWelcome back!                        §8║");
-        Bukkit.getLogger().info("§8║                     §aPlugin has been enabled                  §8║");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                §7Server IP§8: §6play.universenetwork.id        §8║");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                §7https://github.com/UniverseNetwork            §8║");
+        Bukkit.getLogger().info("§8║                        §bUniverse§eNetwork                           §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                         §aWelcome back!                            §8║");
+        Bukkit.getLogger().info("§8║                     §aPlugin has been enabled                      §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                §7Server IP§8: §6play.universenetwork.id                §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                          §7Version: §b" + this.getDescription().getVersion() + "                            §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                      §7Author: " + this.getDescription().getAuthors() + "                          §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                §7https://github.com/UniverseNetwork                §8║");
         Bukkit.getLogger().info("§8╚══════════════════════════════════════════════════════════════════╝");
         Bukkit.getLogger().info("");
     }
@@ -80,15 +76,19 @@ public final class UniverseCore extends JavaPlugin {
     public void onDisableMessage() {
         Bukkit.getLogger().info("");
         Bukkit.getLogger().info("§8╔══════════════════════════════════════════════════════════════════╗");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                        §bUniverse§eNetwork                     §8║");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                           §cGoodbye!                           §8║");
-        Bukkit.getLogger().info("§8║                     §cDisabling the plugin....                 §8║");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                §7Server IP§8: §6play.universenetwork.id        §8║");
-        Bukkit.getLogger().info("§8║                                                                §8║");
-        Bukkit.getLogger().info("§8║                §7https://github.com/UniverseNetwork            §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                        §bUniverse§eNetwork                           §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                           §cGoodbye!                               §8║");
+        Bukkit.getLogger().info("§8║                     §cDisabling the plugin....                     §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                §7Server IP§8: §6play.universenetwork.id                §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                          §7Version: §b" + this.getDescription().getVersion() + "                            §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                      §7Author: " + this.getDescription().getAuthors() + "                          §8║");
+        Bukkit.getLogger().info("§8║                                                                  §8║");
+        Bukkit.getLogger().info("§8║                §7https://github.com/UniverseNetwork                §8║");
         Bukkit.getLogger().info("§8╚══════════════════════════════════════════════════════════════════╝");
         Bukkit.getLogger().info("");
     }

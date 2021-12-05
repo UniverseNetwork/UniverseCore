@@ -6,7 +6,7 @@ JoinMessage:
   Centered: true
   Message:
     - ' '
-    - '&e%player% &aJoin &bthe server!%'
+    - '&e%player% &aJoin &bthe server!'
     - ' '
 
 QuitMessage:
@@ -14,5 +14,5 @@ QuitMessage:
   Centered: true
   Message:
     - ' '
-    - '&e%player% &cQuit &bthe server!%'
+    - '&e%player% &cQuit &bthe server!'
     - ' '

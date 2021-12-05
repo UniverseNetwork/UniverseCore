@@ -4,10 +4,12 @@ import id.universenetwork.universecore.Bukkit.command.*;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import org.bukkit.Bukkit;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandMap;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,6 +21,7 @@ import static id.universenetwork.universecore.Bukkit.utils.utils.colors;
 
 public abstract class UNCommand extends Command {
 
+    private static UNCommand instance;
     final String description;
     final String usage;
     private String permission;
@@ -26,7 +29,7 @@ public abstract class UNCommand extends Command {
     final boolean onlyPlayer;
     final String[] aliases;
 
-    public UNCommand(String name, String permission, String description, String usage, int argsLength, boolean onlyPlayer, String... aliases) {
+    public UNCommand(String name, String permission, String usage, String description, int argsLength, boolean onlyPlayer, String... aliases) {
         super(name, description, usage, Arrays.asList(aliases));
         this.description = description;
         this.usage = usage;
@@ -48,7 +51,7 @@ public abstract class UNCommand extends Command {
     }
 
     public UNCommand(String name, String permission, String usage, String description, int argsLength, boolean onlyPlayer) {
-        this(name, permission, usage, description, argsLength, onlyPlayer, null);
+        this(name, permission, usage, description, argsLength, onlyPlayer, (String) null);
     }
 
     public UNCommand(String name, String permission, String usage, String description, int argsLength) {
@@ -67,12 +70,17 @@ public abstract class UNCommand extends Command {
         this(name, permission, null);
     }
 
-    public void execute(Player player, String[] args) {}
-    public void execute(CommandSender sender, String[] args) {}
+    public abstract void execute(CommandSender sender, String[] args);
     public abstract List<String> TabCompleter(CommandSender sender, String s, String[] args);
 
     @Override
-    public boolean execute(@Nonnull CommandSender sender, @Nonnull String label, @Nonnull String[] args) {
+    public boolean execute(@NotNull CommandSender sender, @NotNull String label, @NotNull String[] args) {
+
+        if (getPermission() == null) {
+            execute(sender,args);
+            return true;
+        }
+
         if (!sender.hasPermission(Objects.requireNonNull(getPermission()))) {
             sendCentredMessage(sender,"&b");
             sendCentredMessage(sender, MessageData.getInstance().getString(MessageEnum.NOPERM));
@@ -81,6 +89,10 @@ public abstract class UNCommand extends Command {
         }
 
         if (args.length > argsLength) {
+            if (argsLength == -1) {
+                execute(sender,args);
+                return true;
+            }
             sender.sendMessage(colors(MessageData.getInstance().getString(MessageEnum.TOOMANYARG)));
             sender.sendMessage(colors("&6Usage: &e" + usage));
             return true;
@@ -100,14 +112,16 @@ public abstract class UNCommand extends Command {
     }
 
     @Override
-    public List<String> tabComplete(@Nonnull CommandSender sender, @Nonnull String alias, @Nonnull String[] args) {
-
+    @NotNull
+    public List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) {
 
         if (args.length > argsLength) {
             return Collections.emptyList();
         }
 
-        if (!(sender.hasPermission(Objects.requireNonNull(getPermission())))) {
+        if (getPermission() == null) return TabCompleter(sender, alias, args);
+
+        if (!(sender.hasPermission(getPermission()))) {
             return Collections.emptyList();
         }
 
@@ -138,14 +152,20 @@ public abstract class UNCommand extends Command {
         return permission;
     }
 
+    public static UNCommand getInstance() {
+        return instance;
+    }
+
     public static void register() {
         new GamemodeCommand();
-        // new GiveCommand();
+        new GiveCommand();
         new KaboomCommand();
         new MainCommand();
         new PingCommand();
         new SantetCommand();
         new ToggleDropCommand();
         new WhereIsCommand();
+        new BroadCastCommand();
+        new DuarDuarCommand();
     }
 }

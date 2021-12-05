@@ -3,6 +3,7 @@ package id.universenetwork.universecore.Bukkit.command;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bungee.utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -45,6 +46,11 @@ public class PingCommand extends UNCommand {
 
     @Override
     public List<String> TabCompleter(CommandSender sender, String s, String[] args) {
+
+        if (args.length == 1) {
+            return utils.getOnlinePlayers(args[0]);
+        }
+
         return null;
     }
 

@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
+import java.util.Objects;
 
 import static id.universenetwork.universecore.Bukkit.utils.utils.colors;
 
@@ -38,7 +39,7 @@ public class SantetCommand extends UNCommand {
             }
             if (t != null) {
                 s.sendMessage(MessageData.getInstance().getString(MessageEnum.SANTETS).replaceAll("%player%", t.getDisplayName()));
-                t.getLocation().getWorld().strikeLightning(t.getLocation());
+                Objects.requireNonNull(t.getLocation().getWorld()).strikeLightning(t.getLocation());
                 t.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,100,5));
                 t.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,100,5));
                 t.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,100,5));
