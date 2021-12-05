@@ -1,4 +1,4 @@
-package id.universenetwork.universecore.Bukkit.command;
+package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.utils.CenterMessage;

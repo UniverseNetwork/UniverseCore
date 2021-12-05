@@ -1,4 +1,4 @@
-package id.universenetwork.universecore.Bukkit.command;
+package id.universenetwork.universecore.Bukkit.command.Troll;
 
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;

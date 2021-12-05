@@ -1,9 +1,9 @@
-package id.universenetwork.universecore.Bukkit.command;
+package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
-import id.universenetwork.universecore.Bungee.utils.utils;
+import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

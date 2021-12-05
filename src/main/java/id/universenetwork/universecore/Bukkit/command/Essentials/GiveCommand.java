@@ -1,4 +1,4 @@
-package id.universenetwork.universecore.Bukkit.command;
+package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import com.google.common.collect.ImmutableList;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
