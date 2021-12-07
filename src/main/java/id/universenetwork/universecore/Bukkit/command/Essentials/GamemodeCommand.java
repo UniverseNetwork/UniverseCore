@@ -32,8 +32,9 @@ public class GamemodeCommand extends UNCommand {
                             p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
                                     .replace("%gamemode%", String.valueOf(p.getGameMode())));
                         } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMC);
-                            p.sendMessage(utils.colors(StringUtils.replace(a, "%gamemode%", String.valueOf(p.getGameMode()))));
+                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
+                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
+                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "CREATIVE"})));
                             p.setGameMode(org.bukkit.GameMode.CREATIVE);
                         }
                     }
@@ -43,8 +44,9 @@ public class GamemodeCommand extends UNCommand {
                             p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
                                     .replace("%gamemode%", String.valueOf(p.getGameMode())));
                         } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMS);
-                            p.sendMessage(utils.colors(StringUtils.replace(a, "%gamemode%", String.valueOf(p.getGameMode()))));
+                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
+                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
+                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "SURVIVAL"})));
                             p.setGameMode(org.bukkit.GameMode.SURVIVAL);
                         }
                     }
@@ -54,8 +56,9 @@ public class GamemodeCommand extends UNCommand {
                             p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
                                     .replace("%gamemode%", String.valueOf(p.getGameMode())));
                         } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMA);
-                            p.sendMessage(utils.colors(StringUtils.replace(a, "%gamemode%", String.valueOf(p.getGameMode()))));
+                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
+                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
+                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "ADVENTURE"})));
                             p.setGameMode(org.bukkit.GameMode.ADVENTURE);
                         }
                     }
@@ -65,8 +68,9 @@ public class GamemodeCommand extends UNCommand {
                             p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
                                     .replace("%gamemode%", String.valueOf(p.getGameMode())));
                         } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMSP);
-                            p.sendMessage(utils.colors(StringUtils.replace(a, "%gamemode%", String.valueOf(p.getGameMode()))));
+                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
+                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
+                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "CREATIVE"})));
                             p.setGameMode(org.bukkit.GameMode.SPECTATOR);
                         }
                     }
