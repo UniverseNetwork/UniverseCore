@@ -1,6 +1,9 @@
 package id.universenetwork.universecore.Bukkit.manager;
 
-import id.universenetwork.universecore.Bukkit.command.*;
+import id.universenetwork.universecore.Bukkit.command.Essentials.*;
+import id.universenetwork.universecore.Bukkit.command.MainCommand;
+import id.universenetwork.universecore.Bukkit.command.Troll.KaboomCommand;
+import id.universenetwork.universecore.Bukkit.command.Troll.SantetCommand;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import org.bukkit.Bukkit;
@@ -152,6 +155,10 @@ public abstract class UNCommand extends Command {
         return permission;
     }
 
+    public void sendHelp(CommandSender sender) {
+        sender.sendMessage(colors("&6Usage: &e" + getUsage()));
+    }
+
     public static UNCommand getInstance() {
         return instance;
     }
@@ -166,6 +173,7 @@ public abstract class UNCommand extends Command {
         new ToggleDropCommand();
         new WhereIsCommand();
         new BroadCastCommand();
-        new DuarDuarCommand();
+        /*new DuarDuarCommand();*/
+        /*new PlayerInfoCommand();*/
     }
 }
