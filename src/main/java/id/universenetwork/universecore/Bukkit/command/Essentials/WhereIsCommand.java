@@ -1,5 +1,7 @@
 package id.universenetwork.universecore.Bukkit.command.Essentials;
 
+import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandMethod;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
@@ -9,64 +11,54 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.List;
 import java.util.Objects;
 
-import static id.universenetwork.universecore.Bukkit.utils.utils.colors;
-
 public class WhereIsCommand extends UNCommand {
 
-    public WhereIsCommand() {
-        super("whereis",
-                "universenetwork.whereis",
-                "/whereis (player)",
-                null, 1, true, "uwhereis", "wis", "uwis");
-    }
+    @CommandMethod("whereis|wis|uwhereis|uwis [target]")
+    public void commandWhereIs(final @NonNull CommandSender sender,
+                        final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
+        if (!utils.checkPermission(sender, "whereis")) return;
 
-    @Override
-    public void execute(CommandSender s, String[] args) {
-        if (args.length == 0) {
-            s.sendMessage(colors("&6Usage: &e" + getUsage()));
-        } else if (args.length == 1) {
-            Player t = Bukkit.getPlayer(args[0]);
-            if (t != null) {
-                if (s instanceof Player) {
-                    Player p = (Player) s;
-                    List<String> a = MessageData.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
-                    String b = StringUtils.join(a, "\n");
-                    String c = ChatColor.translateAlternateColorCodes('&', StringUtils.replaceEach(b,
-                            new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
-                            new String[]{t.getName(), Objects.requireNonNull(t.getLocation().getWorld()).getName(),
-                                    String.valueOf(t.getLocation().getX()), String.valueOf(t.getLocation().getY()), String.valueOf(t.getLocation().getZ()),
-                                    String.valueOf(t.getLocation().getYaw()), String.valueOf(t.getLocation().getPitch())}));
-                    TextComponent d = new TextComponent(c);
-                    d.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, String.valueOf(p.teleport(t, PlayerTeleportEvent.TeleportCause.PLUGIN))));
-                    d.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(colors("&6Click to teleport to " + t.getName())).create()));
-                    s.spigot().sendMessage(d);
-                } else {
-                    List<String> a = MessageData.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
-                    String b = StringUtils.join(a, "\n");
-                    s.sendMessage(ChatColor.translateAlternateColorCodes('&', StringUtils.replaceEach(b,
-                            new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
-                            new String[]{t.getName(), Objects.requireNonNull(t.getLocation().getWorld()).getName(),
-                                    String.valueOf(t.getLocation().getX()), String.valueOf(t.getLocation().getY()), String.valueOf(t.getLocation().getZ()),
-                                    String.valueOf(t.getLocation().getYaw()), String.valueOf(t.getLocation().getPitch())})));
-                }
-            } else s.sendMessage(MessageData.getInstance().getString(MessageEnum.NOPLAYER));
-        }
-    }
+        TargetsCallback targets = this.getTargets(sender, targetName);
 
-    @Override
-    public List<String> TabCompleter(CommandSender sender, String s, String[] args) {
-        if (args.length == 1) {
-            return utils.getOnlinePlayers(args[0]);
+        if (targets.size() > 1) {
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.ONEPLAYER));
+            return;
         }
-        return null;
+
+        targets.stream().findFirst().ifPresent(player -> {
+            if (sender instanceof Player) {
+                List<String> a = MessageData.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
+                String b = StringUtils.join(a, "\n");
+                String c = utils.colors(StringUtils.replaceEach(b,
+                        new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
+                        new String[]{player.getName(), Objects.requireNonNull(player.getLocation().getWorld()).getName(),
+                                String.valueOf(player.getLocation().getX()), String.valueOf(player.getLocation().getY()), String.valueOf(player.getLocation().getZ()),
+                                String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));
+                TextComponent msg = new TextComponent(c);
+                msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + player.getName()));
+                msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to teleport!").create()));
+                utils.sendSpigotMsg(sender, msg);
+                /*utils.sendMsg(sender, StringUtils.replaceEach(b,
+                        new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
+                        new String[]{player.getName(), Objects.requireNonNull(player.getLocation().getWorld()).getName(),
+                                String.valueOf(player.getLocation().getX()), String.valueOf(player.getLocation().getY()), String.valueOf(player.getLocation().getZ()),
+                                String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));*/
+            } else {
+                List<String> a = MessageData.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
+                String b = StringUtils.join(a, "\n");
+                utils.sendMsg(sender, StringUtils.replaceEach(b,
+                        new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
+                        new String[]{player.getName(), Objects.requireNonNull(player.getLocation().getWorld()).getName(),
+                                String.valueOf(player.getLocation().getX()), String.valueOf(player.getLocation().getY()), String.valueOf(player.getLocation().getZ()),
+                                String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));
+            }
+        });
     }
 }

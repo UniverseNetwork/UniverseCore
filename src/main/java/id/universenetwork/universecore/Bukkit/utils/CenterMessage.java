@@ -1,9 +1,11 @@
 package id.universenetwork.universecore.Bukkit.utils;
 
 import id.universenetwork.universecore.Bukkit.enums.DefaultFontInfo;
+import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+@UtilityClass
 public class CenterMessage {
 
     private final static int CENTER_PX = 154;

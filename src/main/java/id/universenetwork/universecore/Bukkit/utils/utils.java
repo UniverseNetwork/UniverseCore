@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -29,17 +30,17 @@ public class utils {
     }
 
     /**
-     * @return
+     * @return Prefix message
      */
     public String getPrefix() {
         return MessageData.getInstance().getString(MessageEnum.PREFIX);
     }
 
     /**
-     * @param sender
-     * @param msg
+     * @param sender the receiver
+     * @param msg    message to send
      */
-    public void sendMsg(CommandSender sender, String msg) {
+    public void sendMsg(@NotNull CommandSender sender, String msg) {
         sender.sendMessage(colors(msg));
     }
 
@@ -47,13 +48,13 @@ public class utils {
      * @param sender
      * @param msg
      */
-    public void sendSpigotMsg(CommandSender sender, BaseComponent msg) {
+    public void sendSpigotMsg(@NotNull CommandSender sender, BaseComponent msg) {
         sender.spigot().sendMessage(msg);
     }
 
-    public void sendTitle(Player player, @Nullable String title, @Nullable String subtitle, int fadeIn, int stay, int fadeOut) {
+    /*public void sendTitle(@NotNull Player player, @Nullable String title, @Nullable String subtitle, int fadeIn, int stay, int fadeOut) {
         player.sendTitle(utils.colors(title), utils.colors(subtitle), fadeIn, stay, fadeOut);
-    }
+    }*/
 
     /**
      * @param message
@@ -67,7 +68,7 @@ public class utils {
      * @param message
      * @return
      */
-    public List<String> getMsgStringList(MessageEnum message) {
+    public List<String> getMsgStringList(@NotNull MessageEnum message) {
         return MessageData.message.getConfig().getStringList(message.getPath());
     }
 
@@ -83,7 +84,7 @@ public class utils {
      * @param lore
      * @return
      */
-    public List<String> colorsArray(List<String> lore) {
+    public List<String> colorsArray(@NotNull List<String> lore) {
 
         for ( int i = 0 ; i < lore.size() ; i++ ) {
             lore.set(i, ChatColor.translateAlternateColorCodes('&', lore.get(i)));
@@ -122,9 +123,9 @@ public class utils {
     }
 
     /**
-     * @param potionEffectType
-     * @param duration
-     * @param amplifier
+     * @param potionEffectType potion type
+     * @param duration duration of potion
+     * @param amplifier level of the potion
      */
     public void addEffectToAllPlayer(PotionEffectType potionEffectType, int duration, int amplifier) {
         Bukkit.getOnlinePlayers().forEach(p -> p.addPotionEffect(new PotionEffect(potionEffectType, duration, amplifier)));
@@ -132,7 +133,7 @@ public class utils {
 
     /**
      * @param partialName name
-     * @return return
+     * @return filterStartingWith
      */
     public List<String> getOnlinePlayers(String partialName) {
         return filterStartingWith(partialName, Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName));

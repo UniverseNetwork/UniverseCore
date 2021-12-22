@@ -2,6 +2,7 @@ package id.universenetwork.universecore.Bukkit.enums;
 
 public enum ConfigEnum {
 
+    USECONFIRMATION("Settings.use-confirmation"),
     JENABLE("JoinMessage.Enabled"),
     JCENTER("JoinMessage.Centered"),
     JMSG("JoinMessage.Message"),

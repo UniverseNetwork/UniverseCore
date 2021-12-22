@@ -1,26 +1,28 @@
 prefix: '&bUniverse&eCore &8&l> &r'
 no-perm: '&cYou don''t have permission to execute this command!'
 only-player: '&cYou must be a player to execute the command!'
+add-specify-player: '&cPlease specify a target player!'
+check-only-one-player: '&cYou can only check one player at a time!'
 too-many-args: '&cToo many arguments!'
 reload: '&aSuccessfully reloading plugin!'
 santet-title: '&c&lSANTET'
 santet-success: '&7Berhasil menSantet &e%player%&7!'
-santet-all-player: '&7Berhasil menSantet &aSemua Player&7!'
+santet-all-player: '&7Berhasil menSantet &e%player% &7players!'
 player-not-found: '&cNo player found!'
 kaboom-title: '&a&lKABOOM'
-kaboom-success: '&7Berhasil mengKaboom&e %player%&7!'
-ping-message: '&7Ping kamu adalah &e%ping%ms'
-ping-other-message: '&7Ping &a%player% &7adalah &e%ping%ms'
+kaboom-success: '&7Berhasil mengKaboom &e%player%&7!'
+kaboom-all-player: '&7Berhasil menKaboom &e%player% &7players!'
+ping-message: '&7Ping kamu adalah &e%ping%ms7.'
+ping-other-message: '&7Ping &a%player% &7adalah &e%ping%ms&7.'
 ping-console-message: '&7Ping mu &e0ms&7. kamu adalah console!'
-toggledrop-on: "&7ToggleDrop Item &adiaktifkan&7!"
-toggledrop-off: "&7ToggleDrop Item &cdinonaktifkan&7!"
-gamemode-creative: "&7Set your gamemode from &e%gamemode% &7to &aCREATIVE&7!"
-gamemode-survival: "&7Set your gamemode from &e%gamemode% &7to &aSURVIVAL&7!"
-gamemode-adventure: "&7Set your gamemode from &e%gamemode% &7to &aADVENTURE&7!"
-gamemode-spectator: "&7Set your gamemode from &e%gamemode% &7to &aSPECTATOR&7!"
-already-in-gamemode-perplayer: "&7You already in gamemode &e%gamemode%"
-already-in-gamemode-target: "&6%player% &7already in gamemode %gamemode%"
-invalid-item: "&cInvalid item!"
+toggledrop-on: '&7ToggleDrop &aOn&7!'
+toggledrop-on-target: '&7ToggleDrop &aOn &7for &b%player%&7!'
+toggledrop-off: '&7ToggleDrop &cOff&7!'
+toggledrop-off-target: '&7ToggleDrop &cOff &7for &b%player%&7!'
+gamemode-change: '&7Set your game mode to &a%gamemode%&7!'
+gamemode-change-other: '&7Set game mode &a%gamemode%&7 for %player%!'
+whitelist-on: '&7The server whitelist is now &aOn&7!'
+whitelist-off: '&7The server whitelist is now &cOff&7!'
 whereis-message:
   - '&8&m==========&b Infomation for &a%player% &8&m=========='
   - '&bWorld&8: &e%world%'
@@ -31,3 +33,17 @@ whereis-message:
   - '&bYaw&8: &7%yaw%'
   - '&bPitch&8: &7%pitch%'
   - '&8&m=========================================='
+playerinfo-message:
+  - '&e%player%''s &7information:'
+  - '&7- &bUUID: &f%uuid%'
+  - '&7- &bIP: &f%ip%'
+  - '&7- &bFirstPlayed: &f%last_played%'
+  - '&7- &bLastPlayed: &f%first_played%'
+  - '&7- &bPing: &f%ping%'
+  - '&7- &bGamemode: &f%gamemode%'
+  - '&7- &bIsOp: &f%isop%'
+  - '&7- &bIsFly: &f%isfly%'
+  - '&7- &bIsAllowFly: &f%allowfly%'
+  - '&7- &bIsInvulnerable: &f%isinvulnerable%'
+  - '&7- &bFlySpeed: &f%flyspeed%'
+  - '&7- &bWalkSpeed: &f%walkspeed%'

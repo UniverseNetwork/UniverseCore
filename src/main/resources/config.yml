@@ -1,6 +1,10 @@
 # test
 # nothing here
 
+Settings:
+  # use or not confirmation for command
+  use-confirmation: true
+
 JoinMessage:
   Enabled: true
   Centered: true

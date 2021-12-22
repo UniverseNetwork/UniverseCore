@@ -14,22 +14,28 @@ import static net.md_5.bungee.config.ConfigurationProvider.getProvider;
 
 public class ConfigManager {
 
-    final String configName = "bungeeconfig.yml";
+    private static ConfigManager instance;
+    final String name;
     Configuration cfg;
 
+    public static ConfigManager getInstance() {
+        return ConfigManager.instance;
+    }
+
     // Finds and Generates the config file
-    public ConfigManager(boolean Reload) {
-        if (Reload) System.out.println(" §eReloading Settings Manager...");
-        else UniverseCore.getInstance().getLogger().info("§ePreparing Settings Manager...");
+    public ConfigManager(String Name) {
+        name = Name;
         try {
-            if (!UniverseCore.getInstance().getDataFolder().exists()) UniverseCore.getInstance().getDataFolder().mkdirs();
-            File configFile = new File(UniverseCore.getInstance().getDataFolder(), configName);
-            if (!configFile.exists())
-                try (InputStream in = UniverseCore.getInstance().getResourceAsStream(configName)) {
+            if (!UniverseCore.getInstance().getDataFolder().exists()) {
+                UniverseCore.getInstance().getDataFolder().mkdir();
+            }
+            File configFile = new File(UniverseCore.getInstance().getDataFolder(), Name);
+            if (!configFile.exists()) {
+                try (InputStream in = UniverseCore.getInstance().getResourceAsStream(Name)) {
                     java.nio.file.Files.copy(in, configFile.toPath());
                 }
+            }
             cfg = getProvider(YamlConfiguration.class).load(configFile);
-            if (Reload) System.out.println(" §aSettings Manager have been reloaded");
         } catch (IOException e) {
             throw new RuntimeException("Unable to load configuration", e);
         }
@@ -37,7 +43,7 @@ public class ConfigManager {
 
     public void save() {
         try {
-            File configFile = new File(UniverseCore.getInstance().getDataFolder(), configName);
+            File configFile = new File(UniverseCore.getInstance().getDataFolder(), name);
             if (configFile.exists()) getProvider(YamlConfiguration.class).save(cfg, configFile);
         } catch (IOException e) {
             throw new RuntimeException("Unable to save configuration", e);

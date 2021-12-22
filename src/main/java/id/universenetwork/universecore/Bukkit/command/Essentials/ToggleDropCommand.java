@@ -1,42 +1,85 @@
 package id.universenetwork.universecore.Bukkit.command.Essentials;
 
+import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandMethod;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.data.ToggleDropData;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import id.universenetwork.universecore.Bukkit.utils.utils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.util.List;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class ToggleDropCommand extends UNCommand {
 
-    public ToggleDropCommand() {
-        super("toggledrop", "universenetwork.toggledrop",
-                "/toggledrop", null, 0, true,
-                "td", "utd", "utoggledrop");
-    }
+    @CommandMethod("toggledrop|td [toggle] [target]")
+    public void commandToggleDrop(
+            final @NonNull CommandSender sender,
+            final @NonNull @Argument(value = "toggle", defaultValue = "none", suggestions = "toggles") String toggle,
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (sender instanceof Player) {
-            Player p = (Player) sender;
-            ToggleDropData td = new ToggleDropData(p.getUniqueId());
-            if (!td.hasID()) {
-                sender.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.TDON)));
-                td.setId(true);
-            } else {
-                sender.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.TDOFF)));
-                td.removeID();
-            }
-        } else {
-            sender.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ONLYPLAYER)));
+        if (!utils.checkPermission(sender, "toggledrop")) return;
+
+        TargetsCallback targets = this.getTargets(sender, targetName);
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "toggledrop", true)) {
+            return;
         }
-    }
 
-    @Override
-    public List<String> TabCompleter(CommandSender sender, String s, String[] args) {
-        return null;
+
+        targets.forEach(player -> {
+            ToggleDropData td = new ToggleDropData(player.getUniqueId());
+            switch (toggle) {
+                case "none":
+                case "toggle": {
+                    if (!td.hasID()) {
+                        td.setId(player.getUniqueId(), true);
+                        utils.sendMsg(player, utils.getMsgString(MessageEnum.TDON));
+                        break;
+                    }
+                    td.removeID(player.getUniqueId());
+                    utils.sendMsg(player, utils.getMsgString(MessageEnum.TDOFF));
+                    break;
+                }
+                case "on": {
+                    td.setId(player.getUniqueId(), true);
+                    utils.sendMsg(player, utils.getMsgString(MessageEnum.TDON));
+                    break;
+                }
+                case "off": {
+                    td.removeID(player.getUniqueId());
+                    utils.sendMsg(player, utils.getMsgString(MessageEnum.TDOFF));
+                    break;
+                }
+                default: {
+                    utils.sendMsg(player, utils.getPrefix() + "&cWrong value!");
+                }
+            }
+        });
+
+
+
+        if (others) {
+            if (targets.size() == 1) {
+                targets.stream().findFirst().ifPresent(player -> {
+                    ToggleDropData td = new ToggleDropData(player.getUniqueId());
+                    utils.sendMsg(player, td.checkID(player.getUniqueId()) ?
+                            StringUtils.replace(utils.getMsgString(MessageEnum.TDONT), "%player%", player.getName()) :
+                            StringUtils.replace(utils.getMsgString(MessageEnum.TDOFFT), "%player%", player.getName()));
+                });
+            } else {
+                utils.sendMsg(sender, "&7Toggled drop for &e" + targets.size() + " &7players!");
+            }
+        } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
+            targets.stream().findFirst().ifPresent(player -> {
+                ToggleDropData td = new ToggleDropData(player.getUniqueId());
+                utils.sendMsg(player, td.checkID(player.getUniqueId()) ?
+                        StringUtils.replace(utils.getMsgString(MessageEnum.TDONT), "%player%", player.getName()) :
+                        StringUtils.replace(utils.getMsgString(MessageEnum.TDOFFT), "%player%", player.getName()));
+            });
+        }
+
     }
 }

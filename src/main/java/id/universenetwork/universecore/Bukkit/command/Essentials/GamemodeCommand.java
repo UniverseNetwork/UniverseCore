@@ -1,165 +1,285 @@
 package id.universenetwork.universecore.Bukkit.command.Essentials;
 
+import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.suggestions.Suggestions;
+import cloud.commandframework.context.CommandContext;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GamemodeCommand extends UNCommand {
 
-    public GamemodeCommand() {
-        super("gamemode", "universenetwork.gamemode", "/gamemode [creative|survival|adventure|spectator] <player>", null,
-                2, false, "ugamemode", "gm", "ugm");
+    @CommandMethod("gamemode|gm|ugm|ugamemode <gamemode> [target]")
+    public void gamemode(
+            final @NonNull CommandSender sender,
+            final @NonNull @Argument(value = "gamemode", suggestions = "gamemodes") String mode,
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
+
+        if (!utils.checkPermission(sender, "gamemode")) {
+            return;
+        }
+
+        GameMode gameMode = this.getGamemode(mode);
+
+        if (gameMode == null) {
+            utils.sendMsg(sender, utils.getPrefix() + "&cInvalid GameMode!");
+        }
+
+        if (!utils.checkPermission(sender, "gamemode." + gameMode)) {
+            return;
+        }
+
+        TargetsCallback targets = this.getTargets(sender, targetName);
+        if (targets.notifyIfEmpty()) {
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
+            return;
+        }
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "gamemode" + gameMode, true)) {
+            return;
+        }
+
+        core.getConfirmationManager().requestConfirm(() -> {
+            targets.stream().forEach(player -> {
+                player.setGameMode(Objects.requireNonNull(gameMode));
+                utils.sendMsg(player, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGE),
+                        new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
+            });
+
+            if (others) {
+                if (targets.size() == 1) {
+                    targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{Objects.requireNonNull(gameMode).toString(), player.getName()})));
+                } else {
+                    utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{Objects.requireNonNull(gameMode).toString(), String.valueOf(targets.size())}));
+                }
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
+                targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                        new String[]{"%gamemode%", "%player%"}, new String[]{Objects.requireNonNull(gameMode).toString(), player.getName()})));
+            }
+        }, this.canSkip("gamemode change", targets, sender));
     }
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (args.length == 1) {
-            if (sender instanceof Player) {
-                Player p = (Player) sender;
-                if (args[0].equalsIgnoreCase("creative")) {
-                    if (p.hasPermission("universenetwork.gamemode.creative")) {
-                        if (p.getGameMode() == GameMode.CREATIVE) {
-                            p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
-                                    .replace("%gamemode%", String.valueOf(p.getGameMode())));
-                        } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
-                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
-                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "CREATIVE"})));
-                            p.setGameMode(org.bukkit.GameMode.CREATIVE);
-                        }
-                    }
-                } else if (args[0].equalsIgnoreCase("survival")) {
-                    if (p.hasPermission("universenetwork.gamemode.survival")) {
-                        if (p.getGameMode() == GameMode.SURVIVAL) {
-                            p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
-                                    .replace("%gamemode%", String.valueOf(p.getGameMode())));
-                        } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
-                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
-                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "SURVIVAL"})));
-                            p.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                        }
-                    }
-                } else if (args[0].equalsIgnoreCase("adventure")) {
-                    if (p.hasPermission("universenetwork.gamemode.adventure")) {
-                        if (p.getGameMode() == GameMode.ADVENTURE) {
-                            p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
-                                    .replace("%gamemode%", String.valueOf(p.getGameMode())));
-                        } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
-                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
-                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "ADVENTURE"})));
-                            p.setGameMode(org.bukkit.GameMode.ADVENTURE);
-                        }
-                    }
-                } else if (args[0].equalsIgnoreCase("spectator")) {
-                    if (p.hasPermission("universenetwork.gamemode.spectator")) {
-                        if (p.getGameMode() == GameMode.SPECTATOR) {
-                            p.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.ALRDINGMPPLY))
-                                    .replace("%gamemode%", String.valueOf(p.getGameMode())));
-                        } else {
-                            String a = MessageData.getInstance().getString(MessageEnum.GMCHANGE);
-                            p.sendMessage(utils.colors(StringUtils.replaceEach(a,
-                                    new String[]{"%gamemode%", "%gamemode_change%"}, new String[]{String.valueOf(p.getGameMode()), "CREATIVE"})));
-                            p.setGameMode(org.bukkit.GameMode.SPECTATOR);
-                        }
-                    }
-                } else {
-                    sender.sendMessage("§cInvalid gamemode!");
-                }
-            } else {
-                sender.sendMessage("&6Usage: &e" + getUsage());
-            }
-        } else if (args.length == 2) {
-            Player t = Bukkit.getPlayerExact(args[1]);
-            if (!(t == null)) {
-                if (args[0].equalsIgnoreCase("creative")) {
-                    if (sender.hasPermission("universenetwork.gamemode.creative.others")) {
-                        if (t.getGameMode() == GameMode.CREATIVE) {
-                            sender.sendMessage(utils.colors(StringUtils.replaceEach(MessageData.getInstance().getString(MessageEnum.ALRDINGMPTRG),
-                                    new String[]{"%player%", "%gamemode%"},
-                                    new String[]{t.getName(), String.valueOf(t.getGameMode())})));
-                        } else {
-                            sender.sendMessage(utils.colors("&7Change &6" + t.getName() + " &7gamemode from &e" + t.getGameMode() + " &7to &aCREATIVE"));
-                            t.setGameMode(org.bukkit.GameMode.CREATIVE);
-                        }
-                    }
-                } else if (args[0].equalsIgnoreCase("survival")) {
-                    if (sender.hasPermission("universenetwork.gamemode.survival.others")) {
-                        if (t.getGameMode() == GameMode.SURVIVAL) {
-                            sender.sendMessage(utils.colors(StringUtils.replaceEach(MessageData.getInstance().getString(MessageEnum.ALRDINGMPTRG),
-                                    new String[]{"%player%", "%gamemode%"},
-                                    new String[]{t.getName(), String.valueOf(t.getGameMode())})));
-                        } else {
-                            sender.sendMessage(utils.colors("&7Change &6" + t.getName() + " &7gamemode from &e" + t.getGameMode() + " &7to &aSURVIVAL"));
-                            t.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                        }
-                    }
-                } else if (args[0].equalsIgnoreCase("adventure")) {
-                    if (sender.hasPermission("universenetwork.gamemode.adventure.others")) {
-                        if (t.getGameMode() == GameMode.ADVENTURE) {
-                            sender.sendMessage(utils.colors(StringUtils.replaceEach(MessageData.getInstance().getString(MessageEnum.ALRDINGMPTRG),
-                                    new String[]{"%player%", "%gamemode%"},
-                                    new String[]{t.getName(), String.valueOf(t.getGameMode())})));
-                        } else {
-                            sender.sendMessage(utils.colors("&7Change &6" + t.getName() + " &7gamemode from &e" + t.getGameMode() + " &7to &aADVENTURE"));
-                            t.setGameMode(org.bukkit.GameMode.ADVENTURE);
-                        }
-                    }
-                } else if (args[0].equalsIgnoreCase("spectator")) {
-                    if (sender.hasPermission("universenetwork.gamemode.spectator.others")) {
-                        if (t.getGameMode() == GameMode.SPECTATOR) {
-                            sender.sendMessage(utils.colors(StringUtils.replaceEach(MessageData.getInstance().getString(MessageEnum.ALRDINGMPTRG),
-                                    new String[]{"%player%", "%gamemode%"},
-                                    new String[]{t.getName(), String.valueOf(t.getGameMode())})));
-                        } else {
-                            sender.sendMessage(utils.colors("&7Change &6" + t.getName() + " &7gamemode from &e" + t.getGameMode() + " &7to &aSPECTATOR"));
-                            t.setGameMode(org.bukkit.GameMode.SPECTATOR);
-                        }
-                    }
-                } else {
-                    sender.sendMessage("§cInvalid gamemode!");
-                }
-            } else {
-                sender.sendMessage(utils.colors(MessageData.getInstance().getString(MessageEnum.NOPLAYER)));
-            }
-        } else {
-            sender.sendMessage(utils.colors("&6Usage: &e" + getUsage()));
+    @CommandMethod("gmc|ugmc [target]")
+    public void gamemodeCreative(
+            final @NonNull CommandSender sender,
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+    ) {
+
+        if (!utils.checkPermission(sender, "gamemode.creative")) {
+            return;
         }
+
+        TargetsCallback targets = this.getTargets(sender, targetName);
+        if (targets.notifyIfEmpty()) {
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
+            return;
+        }
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "gamemode.creative", true)) {
+            return;
+        }
+
+        core.getConfirmationManager().requestConfirm(() -> {
+            targets.stream().forEach(player -> {
+                player.setGameMode(GameMode.CREATIVE);
+                utils.sendMsg(player, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGE),
+                        new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
+            });
+
+            if (others) {
+                if (targets.size() == 1) {
+                    targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+                } else {
+                    utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{"CREATIVE", String.valueOf(targets.size())}));
+                }
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
+                targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                        new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+            }
+        }, this.canSkip("gamemode change", targets, sender));
     }
 
-    @Override
-    public List<String> TabCompleter(CommandSender sender, String string, String[] args) {
+    @CommandMethod("gms|ugms [target]")
+    public void gamemodeSurvival(
+            final @NonNull CommandSender sender,
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+    ) {
 
-        List<String> list = new ArrayList<>();
-
-        if (args.length == 1) {
-            if (sender.hasPermission("universenetwork.gamemode.*")){
-                list.addAll(Arrays.asList("creative", "survival", "adventure", "spectator"));
-            } else if (sender.hasPermission("universenetwork.gamemode.creative") ||
-                    sender.hasPermission("universenetwork.gamemode.creative.others")) {
-                list.add("creative");
-            } else if (sender.hasPermission("universenetwork.gamemode.survival") ||
-                    sender.hasPermission("universenetwork.gamemode.survival.others")) {
-                list.add("survival");
-            } else if (sender.hasPermission("universenetwork.gamemode.adventure") ||
-                    sender.hasPermission("universenetwork.gamemode.adventure.others")) {
-                list.add("adventure");
-            } else if (sender.hasPermission("universenetwork.gamemode.spectator") ||
-                    sender.hasPermission("universenetwork.gamemode.spectator.others")) {
-                list.add("spectator");
-            }
+        if (!utils.checkPermission(sender, "gamemode.survival")) {
+            return;
         }
-        return list;
+
+        TargetsCallback targets = this.getTargets(sender, targetName);
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "gamemode.survival", true)) {
+            return;
+        }
+
+        core.getConfirmationManager().requestConfirm(() -> {
+            targets.stream().forEach(player -> {
+                player.setGameMode(GameMode.SURVIVAL);
+                utils.sendMsg(player, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGE),
+                        new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
+            });
+
+            if (others) {
+                if (targets.size() == 1) {
+                    targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+                } else {
+                    utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{"SURVIVAL", String.valueOf(targets.size())}));
+                }
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
+                targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                        new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+            }
+        }, this.canSkip("gamemode change", targets, sender));
+    }
+
+    @CommandMethod("gma|ugma [target]")
+    public void gamemodeAdventure(
+            final @NonNull CommandSender sender,
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+    ) {
+
+        if (!utils.checkPermission(sender, "gamemode.adventure")) {
+            return;
+        }
+
+        TargetsCallback targets = this.getTargets(sender, targetName);
+        if (targets.notifyIfEmpty()) {
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
+            return;
+        }
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "gamemode.adventure", true)) {
+            return;
+        }
+
+        core.getConfirmationManager().requestConfirm(() -> {
+            targets.stream().forEach(player -> {
+                player.setGameMode(GameMode.ADVENTURE);
+                utils.sendMsg(player, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGE),
+                        new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
+            });
+
+            if (others) {
+                if (targets.size() == 1) {
+                    targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+                } else {
+                    utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{"ADVENTURE", String.valueOf(targets.size())}));
+                }
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
+                targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                        new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+            }
+        }, this.canSkip("gamemode change", targets, sender));
+    }
+
+    @CommandMethod("gmsp|ugmsp [target]")
+    public void gamemodeSpectator(
+            final @NonNull CommandSender sender,
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+    ) {
+
+        if (!utils.checkPermission(sender, "gamemode.spectator")) {
+            return;
+        }
+
+        TargetsCallback targets = this.getTargets(sender, targetName);
+        if (targets.notifyIfEmpty()) {
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
+            return;
+        }
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "gamemode.spectator", true)) {
+            return;
+        }
+
+        core.getConfirmationManager().requestConfirm(() -> {
+            targets.stream().forEach(player -> {
+                player.setGameMode(GameMode.SPECTATOR);
+                utils.sendMsg(player, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGE),
+                        new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
+            });
+
+            if (others) {
+                if (targets.size() == 1) {
+                    targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+                } else {
+                    utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                            new String[]{"%gamemode%", "%player%"}, new String[]{"SPECTATOR", String.valueOf(targets.size())}));
+                }
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
+                targets.stream().findFirst().ifPresent(player -> utils.sendMsg(sender, StringUtils.replaceEach(utils.getMsgString(MessageEnum.GMCHANGEOTHERS),
+                        new String[]{"%gamemode%", "%player%"}, new String[]{player.getGameMode().toString(), player.getName()})));
+            }
+        }, this.canSkip("gamemode change", targets, sender));
+    }
+
+    @Suggestions("gamemodes")
+    public List<String> TabCompleter(CommandContext<CommandSender> sender, String context) {
+        return Stream.of("creative", "ctv", "c", "1",
+                "survival", "sv", "s", "2",
+                "adventure", "adv", "a", "3",
+                "spectator", "spec", "sp", "4").filter(s -> s.toLowerCase().startsWith(context.toLowerCase())).collect(Collectors.toList());
+    }
+
+    private GameMode getGamemode(String mode) {
+        switch (mode.toLowerCase()) {
+            case "creative":
+            case "ctv":
+            case "c":
+            case "1": {
+                return GameMode.CREATIVE;
+            }
+
+            case "survival":
+            case "sv":
+            case "s":
+            case "2": {
+                return GameMode.SURVIVAL;
+            }
+
+            case "adventure":
+            case "adv":
+            case "a":
+            case "3": {
+                return GameMode.ADVENTURE;
+            }
+
+            case "spectator":
+            case "spec":
+            case "sp":
+            case "4": {
+                return GameMode.SPECTATOR;
+            }
+
+        }
+        return null;
     }
 }

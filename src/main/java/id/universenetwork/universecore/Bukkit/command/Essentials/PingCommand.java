@@ -1,15 +1,20 @@
 package id.universenetwork.universecore.Bukkit.command.Essentials;
 
+import cloud.commandframework.annotations.Argument;
+import cloud.commandframework.annotations.CommandMethod;
+import com.google.common.base.Joiner;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
 import id.universenetwork.universecore.Bukkit.utils.utils;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PingCommand extends UNCommand {
@@ -19,39 +24,50 @@ public class PingCommand extends UNCommand {
     String serverName = Bukkit.getServer().getClass().getPackage().getName(),
             serverVersion = serverName.substring(serverName.lastIndexOf(".") + 1);
 
-    public PingCommand() {
-        super("ping", "universenetwork.ping", "/ping <player>",
-                null, 1, false, "uping");
-    }
+    @CommandMethod("Ping|uping [target]")
+    public void commandPing(final @NonNull CommandSender sender,
+                        final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
 
-    @Override
-    public void execute(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            if (sender instanceof Player) {
-                Player p = (Player) sender;
-                sender.sendMessage(MessageData.getInstance().getString(MessageEnum.PINGMSG)
-                        .replaceAll("%ping%", String.valueOf(getPing(p))));
-            } else sender.sendMessage(MessageData.getInstance().getString(MessageEnum.PINGCONSOLEMSG));
-        } else if (args.length == 1) {
-            Player t = Bukkit.getPlayer(args[0]);
-            if (sender.hasPermission("universenetwork.ping.others")) {
-                if (t != null) {
-                    sender.sendMessage(MessageData.getInstance().getString(MessageEnum.PINGMSGO)
-                            .replaceAll("%ping%", String.valueOf(getPing(t)))
-                            .replaceAll("%player%", t.getName()));
-                } else sender.sendMessage(MessageData.getInstance().getString(MessageEnum.NOPLAYER));
-            } else sender.sendMessage(MessageData.getInstance().getString(MessageEnum.NOPERM));
-        }
-    }
-
-    @Override
-    public List<String> TabCompleter(CommandSender sender, String s, String[] args) {
-
-        if (args.length == 1) {
-            return utils.getOnlinePlayers(args[0]);
+        if (!utils.checkPermission(sender, "ping")) {
+            return;
         }
 
-        return null;
+        TargetsCallback targets = this.getTargets(sender, targetName);
+
+        boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
+        if (others && !utils.checkPermission(sender, "ping", true)) {
+            return;
+        }
+        if (!(sender instanceof Player) || targets.doesNotContain((Player) sender) && targetName.equals("self")) {
+            utils.sendMsg(sender, utils.getMsgString(MessageEnum.PINGCONSOLEMSG));
+        }
+
+        if (targetName.equals("self")) {
+            targets.stream().findFirst().ifPresent(player -> {
+                utils.sendMsg(sender, StringUtils.replace(
+                        utils.getMsgString(MessageEnum.PINGMSG), "%ping%", String.valueOf(getPing(player))));
+            });
+        }
+
+        if (others) {
+            if (targets.size() == 1){
+                targets.stream().findFirst().ifPresent(player -> {
+                    utils.sendMsg(sender, StringUtils.replaceEach(
+                            utils.getMsgString(MessageEnum.PINGMSGO), new String[]{"%player%", "%ping%"}, new String[]{player.getName(), String.valueOf(player.getPing())}));
+                });
+            } else if (targets.size() > 1) {
+                List<String> players = new ArrayList<>();
+                for (Player player : Bukkit.getOnlinePlayers()) {
+                    players.add("&e" + player.getName() + "&8(&r" + player.getPing() + "&8)&r");
+                }
+                utils.sendMsg(sender, "&7Player ping List: " + StringUtils.join(players, ", "));
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender) && !targetName.equals("self")) {
+                targets.stream().findFirst().ifPresent(player -> {
+                    utils.sendMsg(sender, StringUtils.replaceEach(
+                            utils.getMsgString(MessageEnum.PINGMSGO), new String[]{"%player%", "%ping%"}, new String[]{player.getName(), String.valueOf(player.getPing())}));
+                });
+            }
+        }
     }
 
     public int getPing(Player p) {

@@ -1,6 +1,9 @@
 package id.universenetwork.universecore.Bukkit.manager.data;
 
 import lombok.Data;
+import lombok.experimental.UtilityClass;
+import org.bukkit.Utility;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,35 +19,23 @@ public class ToggleDropData {
         this.uuid = uuid;
     }
 
-    public void setId(Boolean id) {
+    public void setId(UUID uuid, Boolean id) {
         td.put(uuid, id);
     }
 
-    public Boolean getID() {
+    public Boolean getID(UUID uuid) {
         return td.get(uuid);
     }
 
     public Boolean hasID() {
-        if (td.containsKey(uuid))
-            return true;
-        return false;
+        return td.containsKey(uuid);
     }
 
-    public void removeID() {
+    public Boolean checkID(UUID uuid) {
+        return td.containsKey(uuid);
+    }
+
+    public void removeID(UUID uuid) {
         td.remove(uuid);
-    }
-
-    public void endTask() {
-        if (getID() == true)
-            return;
-
-        removeID();
-    }
-
-    public static boolean hasFakeID(UUID uuid) {
-        if (td.containsKey(uuid))
-            if (td.get(uuid) == true)
-                return true;
-        return false;
     }
 }
