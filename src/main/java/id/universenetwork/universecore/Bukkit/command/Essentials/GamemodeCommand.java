@@ -41,10 +41,6 @@ public class GamemodeCommand extends UNCommand {
         }
 
         TargetsCallback targets = this.getTargets(sender, targetName);
-        if (targets.notifyIfEmpty()) {
-            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
-            return;
-        }
 
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !utils.checkPermission(sender, "gamemode" + gameMode, true)) {
@@ -84,10 +80,6 @@ public class GamemodeCommand extends UNCommand {
         }
 
         TargetsCallback targets = this.getTargets(sender, targetName);
-        if (targets.notifyIfEmpty()) {
-            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
-            return;
-        }
 
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !utils.checkPermission(sender, "gamemode.creative", true)) {
@@ -166,10 +158,6 @@ public class GamemodeCommand extends UNCommand {
         }
 
         TargetsCallback targets = this.getTargets(sender, targetName);
-        if (targets.notifyIfEmpty()) {
-            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
-            return;
-        }
 
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !utils.checkPermission(sender, "gamemode.adventure", true)) {
@@ -209,10 +197,6 @@ public class GamemodeCommand extends UNCommand {
         }
 
         TargetsCallback targets = this.getTargets(sender, targetName);
-        if (targets.notifyIfEmpty()) {
-            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
-            return;
-        }
 
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !utils.checkPermission(sender, "gamemode.spectator", true)) {

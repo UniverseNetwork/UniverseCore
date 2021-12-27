@@ -9,8 +9,9 @@ import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.ConfigData;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.manager.file.Config;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
+import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -52,15 +53,15 @@ public class MainCommand extends UNCommand {
                     if (!utils.checkPermission(sender, "reload")) return;
                     long millis = System.currentTimeMillis();
                     try {
-                        ConfigData.getInstance().reload();
-                        MessageData.getInstance().reload();
-                        Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("UniverseCore")).onDisable();
-                        Objects.requireNonNull(Bukkit.getServer().getPluginManager().getPlugin("UniverseCore")).onEnable();
+                        /*core.saveAllConfig();*/
+                        Config.getInstance().reload();
+                        MessageFile.getInstance().reload();
+                        SuggestionBlocker.getInstance().reload();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     sendCentredMessage(sender, "&a");
-                    sendCentredMessage(sender, MessageData.getInstance().getString(MessageEnum.RELOAD) + " &7(Took &e" + (System.currentTimeMillis() - millis) + "ms&7)");
+                    sendCentredMessage(sender, MessageFile.getInstance().getString(MessageEnum.RELOAD) + " &7(Took &e" + (System.currentTimeMillis() - millis) + "ms&7)");
                     sendCentredMessage(sender, "&a");
                     break;
                 }

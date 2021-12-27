@@ -5,17 +5,20 @@ import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.arguments.parser.ParserParameters;
 import cloud.commandframework.arguments.parser.StandardParameters;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.extra.confirmation.CommandConfirmationManager;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.reflect.ClassPath;
+import id.universenetwork.universecore.Bukkit.command.Essentials.BroadCastCommand;
 import id.universenetwork.universecore.Bukkit.listener.JoinQuitListener;
+import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
 import id.universenetwork.universecore.Bukkit.listener.ToggleDropListener;
 import id.universenetwork.universecore.Bukkit.manager.ConfirmationManager;
-import id.universenetwork.universecore.Bukkit.manager.file.ConfigData;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.manager.file.Config;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
+import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
+import id.universenetwork.universecore.Bukkit.manager.file.Whitelist;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,14 +79,16 @@ public final class UniverseCore extends JavaPlugin {
     }
 
     public void saveAllConfig() {
-        ConfigData.getInstance().saveConfig();
-        MessageData.getInstance().saveConfig();
+        Config.getInstance().saveConfig();
+        MessageFile.getInstance().saveConfig();
+        SuggestionBlocker.getInstance().saveConfig();
     }
 
     @SneakyThrows
     public void register() {
-        ConfigData.cfg.saveDefaultConfig();
-        MessageData.message.saveDefaultConfig();
+        Config.cfg.saveDefaultConfig();
+        MessageFile.message.saveDefaultConfig();
+        SuggestionBlocker.message.saveDefaultConfig();
 
         Function<CommandTree<CommandSender>, CommandExecutionCoordinator<CommandSender>> executionCoordinatorFunction = CommandExecutionCoordinator.simpleCoordinator();
         Function<CommandSender, CommandSender> mapperFunction = Function.identity();
@@ -123,9 +128,14 @@ public final class UniverseCore extends JavaPlugin {
                 TextColor.color(5635925),
                 TextColor.color(5592405)));
 
+        new BroadCastCommand(this);
+
         this.commandRegister();
-        utils.registerListener(new JoinQuitListener(),
-                new ToggleDropListener());
+        utils.registerListener(
+                new JoinQuitListener(),
+                new ToggleDropListener(),
+                new SuggestionListener()
+                );
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -136,6 +146,10 @@ public final class UniverseCore extends JavaPlugin {
             for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(
                     "id.universenetwork.universecore.Bukkit.command")) {
                 try {
+                    if (classInfo.getName().endsWith("WhitelistCommand") && classInfo.getName().endsWith("BroadCastCommand")) {
+                        continue;
+                    }
+
                     Class<?> commandClass = Class.forName(classInfo.getName());
                     this.parseAnnotationCommands(commandClass.newInstance());
                     this.getLogger().info("Registered command: " + commandClass.getSimpleName() + " #" + manager.getCommands().size());

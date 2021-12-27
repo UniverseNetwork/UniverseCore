@@ -8,11 +8,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
 
-public class ConfigData {
-    private static final ConfigData instance = new ConfigData();
+public class Config {
+    private static final Config instance = new Config();
     public static ConfigManager cfg = new ConfigManager(UniverseCore.getPlugin(UniverseCore.class), "config.yml");
 
-    public static ConfigData getInstance() {
+    public static Config getInstance() {
         return instance;
     }
 

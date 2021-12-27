@@ -28,6 +28,7 @@ public enum MessageEnum {
     GMCHANGEOTHERS("gamemode-change-other"),
     WLON("whitelist-on"),
     WLOFF("whitelist-off"),
+    WLMSG("whitelist-message"),
     PIMSG("playerinfo-message");
 
     private final String path;

@@ -45,7 +45,7 @@ public class GiveCommand extends UNCommand {
     @CommandMethod("item|uitem|i <item> [amount]")
     public void commandItem(final @NonNull Player player,
                             final @NonNull @Argument("item") Material material,
-                            final @NonNull @Argument("amount") Integer amount) {
+                            final @NonNull @Argument(value = "amount", defaultValue = "1") Integer amount) {
         if (!utils.checkPermission(player, "give")) {
             return;
         }

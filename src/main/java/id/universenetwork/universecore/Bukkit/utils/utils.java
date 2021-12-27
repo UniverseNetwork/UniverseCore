@@ -2,9 +2,12 @@ package id.universenetwork.universecore.Bukkit.utils;
 
 import id.universenetwork.universecore.Bukkit.UniverseCore;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import lombok.experimental.UtilityClass;
+import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,7 +35,7 @@ public class utils {
      * @return Prefix message
      */
     public String getPrefix() {
-        return MessageData.getInstance().getString(MessageEnum.PREFIX);
+        return MessageFile.getInstance().getString(MessageEnum.PREFIX);
     }
 
     /**
@@ -61,7 +63,7 @@ public class utils {
      * @return
      */
     public String getMsgString(MessageEnum message) {
-        return MessageData.getInstance().getString(message);
+        return MessageFile.getInstance().getString(message);
     }
 
     /**
@@ -69,7 +71,7 @@ public class utils {
      * @return
      */
     public List<String> getMsgStringList(@NotNull MessageEnum message) {
-        return MessageData.message.getConfig().getStringList(message.getPath());
+        return MessageFile.message.getConfig().getStringList(message.getPath());
     }
 
     /**
@@ -117,7 +119,7 @@ public class utils {
         if (sender.hasPermission(permission)) {
             return true;
         } else {
-            sender.sendMessage(MessageData.getInstance().getString(MessageEnum.NOPERM));
+            sender.sendMessage(MessageFile.getInstance().getString(MessageEnum.NOPERM));
         }
         return false;
     }

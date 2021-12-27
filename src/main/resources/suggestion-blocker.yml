@@ -1,0 +1,57 @@
+Settings:
+  # enable or not suggestion blocker feature
+  # default : true
+  enable: true
+
+  # the command list
+  command-list:
+    - "shop"
+    - "home"
+    - "sethome"
+    - "delhome"
+    - "tpa"
+    - "tpahere"
+    - "tpaccept"
+    - "tpacancel"
+    - "blockstaker"
+    - "spawn"
+    - "warp"
+    - "is"
+    - "ah"
+    - "balance"
+    - "bal"
+    - "baltop"
+    - "pay"
+    - "tpyes"
+    - "tpno"
+    - "warp"
+    - "donasi"
+    - "donate"
+    - "rank"
+    - "minion"
+    - "minions"
+    - "sellgui"
+    - "mail"
+    - "disposal"
+    - "back"
+    - "afk"
+    - "rules"
+    - "sit"
+    - "crawl"
+    - "lay"
+    - "recipe"
+    - "quickshop"
+    - "qs"
+
+  # enable or not per-group-suggestion feature
+  # default: false
+  per-group-suggestion: false
+
+  # the group and command list
+  group:
+    donatur:
+      - "fly"
+      - "hat"
+      - "nick"
+      - "ec"
+      - "enderchest"

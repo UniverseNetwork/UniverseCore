@@ -4,7 +4,7 @@ import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
@@ -39,7 +39,7 @@ public class KaboomCommand extends UNCommand {
             targets.stream().forEach(player -> {
                 player.setVelocity(player.getLocation().getDirection().setY(10));
                 Objects.requireNonNull(player.getLocation().getWorld()).strikeLightning(player.getLocation());
-                player.sendTitle(MessageData.getInstance().getString(MessageEnum.KABOOMT), null,20,40,20);
+                player.sendTitle(MessageFile.getInstance().getString(MessageEnum.KABOOMT), null,20,40,20);
             });
 
             if (others) {

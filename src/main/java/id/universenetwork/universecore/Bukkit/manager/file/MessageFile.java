@@ -8,11 +8,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.Objects;
 
-public class MessageData {
-    private static final MessageData instance = new MessageData();
+public class MessageFile {
+    private static final MessageFile instance = new MessageFile();
     public static ConfigManager message = new ConfigManager(UniverseCore.getPlugin(UniverseCore.class), "message.yml");
 
-    public static MessageData getInstance() {
+    public static MessageFile getInstance() {
         return instance;
     }
 
@@ -34,7 +34,7 @@ public class MessageData {
 
     public String getStringList(MessageEnum e) {
         StringBuilder sb = new StringBuilder();
-        for (String a : MessageData.message.getConfig().getStringList(e.getPath())) {
+        for (String a : MessageFile.message.getConfig().getStringList(e.getPath())) {
             return ChatColor.translateAlternateColorCodes('&', a);
         }
         return sb.toString();

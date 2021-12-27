@@ -4,10 +4,9 @@ import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -45,7 +44,7 @@ public class SantetCommand extends UNCommand {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,100,5));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100,2));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,100,1));
-                player.sendTitle(MessageData.getInstance().getString(MessageEnum.SANTETT), null, 20, 40, 20);
+                player.sendTitle(MessageFile.getInstance().getString(MessageEnum.SANTETT), null, 20, 40, 20);
             });
 
             if (others) {

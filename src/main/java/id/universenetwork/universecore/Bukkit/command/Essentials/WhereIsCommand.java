@@ -4,7 +4,7 @@ import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageData;
+import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -34,7 +34,7 @@ public class WhereIsCommand extends UNCommand {
 
         targets.stream().findFirst().ifPresent(player -> {
             if (sender instanceof Player) {
-                List<String> a = MessageData.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
+                List<String> a = MessageFile.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
                 String b = StringUtils.join(a, "\n");
                 String c = utils.colors(StringUtils.replaceEach(b,
                         new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
@@ -51,7 +51,7 @@ public class WhereIsCommand extends UNCommand {
                                 String.valueOf(player.getLocation().getX()), String.valueOf(player.getLocation().getY()), String.valueOf(player.getLocation().getZ()),
                                 String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));*/
             } else {
-                List<String> a = MessageData.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
+                List<String> a = MessageFile.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
                 String b = StringUtils.join(a, "\n");
                 utils.sendMsg(sender, StringUtils.replaceEach(b,
                         new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},

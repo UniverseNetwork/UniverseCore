@@ -34,7 +34,7 @@ public class PlayerInfoCommand extends UNCommand {
             return;
         }
 
-        UUID uuid = Objects.requireNonNull(Bukkit.getPlayer(targetName), utils.colors(utils.getMsgString(MessageEnum.NOPLAYER))).getUniqueId();
+        UUID uuid = Objects.requireNonNull(Bukkit.getPlayer(targets.toString())).getUniqueId();
         long timeNow = System.currentTimeMillis();
         long firstPlayed = (timeNow - Bukkit.getOfflinePlayer(uuid).getFirstPlayed()) / 1000L;
         long lastPlayed = (timeNow - Bukkit.getOfflinePlayer(uuid).getLastPlayed()) / 1000L;

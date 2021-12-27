@@ -6,7 +6,7 @@ import id.universenetwork.universecore.Bukkit.UniverseCore;
 import id.universenetwork.universecore.Bukkit.enums.ConfigEnum;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.callbacks.CanSkipCallback;
-import id.universenetwork.universecore.Bukkit.manager.file.ConfigData;
+import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import lombok.Data;
 import org.bukkit.Bukkit;
@@ -144,7 +144,7 @@ public abstract class UNCommand {
     }
 
     public CanSkipCallback canSkip(String action, TargetsCallback targetsCallback, CommandSender sender) {
-        if (!ConfigData.getInstance().getBoolean(ConfigEnum.USECONFIRMATION)) {
+        if (!Config.getInstance().getBoolean(ConfigEnum.USECONFIRMATION)) {
             return new CanSkipCallback(sender, true, null);
         }
 
