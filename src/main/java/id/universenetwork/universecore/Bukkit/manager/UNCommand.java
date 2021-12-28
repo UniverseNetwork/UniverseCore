@@ -39,13 +39,11 @@ public abstract class UNCommand {
             }
 
             switch (arg.toLowerCase()) {
-                case "self": {
+                case "self" -> {
                     callback.add((Player) sender);
                     return callback;
                 }
-                case "*":
-                case "@a":
-                case "@all": {
+                case "*", "@a", "@all" -> {
                     callback.addAll(Bukkit.getOnlinePlayers());
                     return callback;
                 }
@@ -68,9 +66,7 @@ public abstract class UNCommand {
         }
 
         switch (arg.toLowerCase()) {
-            case "*":
-            case "@a":
-            case "@all": {
+            case "*", "@a", "@all" -> {
                 callback.addAll(Bukkit.getOnlinePlayers());
                 return callback;
             }
@@ -96,13 +92,11 @@ public abstract class UNCommand {
             }
 
             switch (arg.toLowerCase()) {
-                case "self": {
+                case "self" -> {
                     callback.add((Player) sender);
                     return callback;
                 }
-                case "*":
-                case "@a":
-                case "@all": {
+                case "*", "@a", "@all" -> {
                     callback.addAll(Bukkit.getOnlinePlayers());
                     return callback;
                 }
@@ -125,9 +119,7 @@ public abstract class UNCommand {
         }
 
         switch (arg.toLowerCase()) {
-            case "*":
-            case "@a":
-            case "@all": {
+            case "*", "@a", "@all" -> {
                 callback.addAll(Bukkit.getOnlinePlayers());
                 return callback;
             }
@@ -193,14 +185,17 @@ public abstract class UNCommand {
     public List<String> player(CommandContext<CommandSender> sender, String context) {
         List<String> players = new ArrayList<>();
 
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            players.add(player.getName());
-        });
+        Bukkit.getOnlinePlayers().forEach(player -> players.add(player.getName()));
 
         players.add("*");
         players.add("@a");
         players.add("@all");
         return players.stream().filter(s -> s.toLowerCase().startsWith(context.toLowerCase())).collect(Collectors.toList());
+    }
+
+    @Suggestions("onePlayers")
+    public List<String> onePlayer(CommandContext<CommandSender> sender, String context) {
+        return utils.getOnlinePlayers(context.toLowerCase());
     }
 
     @Suggestions("toggles")

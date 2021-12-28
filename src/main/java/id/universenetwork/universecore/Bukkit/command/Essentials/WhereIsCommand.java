@@ -43,13 +43,8 @@ public class WhereIsCommand extends UNCommand {
                                 String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));
                 TextComponent msg = new TextComponent(c);
                 msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tp " + player.getName()));
-                msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Click to teleport!").create()));
+                msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(utils.colors("&aClick to teleport!")).create()));
                 utils.sendSpigotMsg(sender, msg);
-                /*utils.sendMsg(sender, StringUtils.replaceEach(b,
-                        new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
-                        new String[]{player.getName(), Objects.requireNonNull(player.getLocation().getWorld()).getName(),
-                                String.valueOf(player.getLocation().getX()), String.valueOf(player.getLocation().getY()), String.valueOf(player.getLocation().getZ()),
-                                String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));*/
             } else {
                 List<String> a = MessageFile.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
                 String b = StringUtils.join(a, "\n");

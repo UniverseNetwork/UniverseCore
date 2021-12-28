@@ -2,18 +2,15 @@ package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
-import cloud.commandframework.annotations.ProxiedBy;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -23,7 +20,7 @@ public class PlayerInfoCommand extends UNCommand {
     @CommandMethod("playerinfo|pi|uplayerinfo|upi [target]")
     public void commandPlayerInfo(
             final @NonNull CommandSender sender,
-            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
+            final @NonNull @Argument(value = "target", suggestions = "onePlayers") String targetName) {
 
         if (!utils.checkPermission(sender, "playerinfo")) return;
 
@@ -34,10 +31,28 @@ public class PlayerInfoCommand extends UNCommand {
             return;
         }
 
-        UUID uuid = Objects.requireNonNull(Bukkit.getPlayer(targets.toString())).getUniqueId();
+
+        Player target = Bukkit.getPlayer(targetName);
+        UUID uuid = null;
+        if (target != null) {
+            uuid = target.getUniqueId();
+        } else {
+            targets.notifyIfEmpty();
+        }
+
         long timeNow = System.currentTimeMillis();
-        long firstPlayed = (timeNow - Bukkit.getOfflinePlayer(uuid).getFirstPlayed()) / 1000L;
-        long lastPlayed = (timeNow - Bukkit.getOfflinePlayer(uuid).getLastPlayed()) / 1000L;
+        long firstPlayed;
+        long onlineTime;
+        if (uuid == null) {
+            targets.notifyIfEmpty();
+            return;
+        } else {
+            firstPlayed = (timeNow - Bukkit.getOfflinePlayer(uuid).getFirstPlayed()) / 1000L;
+            onlineTime = (timeNow - Bukkit.getOfflinePlayer(uuid).getLastPlayed()) / 1000L;
+        }
+
+        long finalFirstPlayed = firstPlayed;
+        long finaleOnlineTime = onlineTime;
 
         targets.stream().findFirst().ifPresent(player -> {
             List<String> a = utils.getMsgStringList(MessageEnum.PIMSG);
@@ -45,13 +60,13 @@ public class PlayerInfoCommand extends UNCommand {
             utils.sendMsg(sender,
                     StringUtils.replaceEach(
                             b,
-                            new String[]{"%player%", "%uuid%", "%ip%", "%first_played%", "%last_played%", "%ping%", "%gamemode%", "%isop%",
+                            new String[]{"%player%", "%uuid%", "%ip%", "%first_played%", "%online_time%", "%ping%", "%gamemode%", "%isop%",
                                     "%isfly%", "%allowfly%", "%isinvulnerable%", "%flyspeed%", "%walkspeed%"},
                             new String[]{player.getName(),
                                     player.getUniqueId().toString(),
                                     Objects.requireNonNull(player.getAddress()).getHostName(),
-                                    utils.getTimeFormat((int) lastPlayed),
-                                    utils.getTimeFormats((int) firstPlayed),
+                                    utils.getTimeFormat((int) finalFirstPlayed),
+                                    utils.getTimeFormats((int) finaleOnlineTime),
                                     String.valueOf(player.getPing()),
                                     player.getGameMode().toString(),
                                     player.isOp() ? "&aYes" : "&cNo",
