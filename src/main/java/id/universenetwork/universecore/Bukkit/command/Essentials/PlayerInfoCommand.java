@@ -72,7 +72,7 @@ public class PlayerInfoCommand extends UNCommand {
                                     "%isfly%", "%allowfly%", "%isinvulnerable%", "%flyspeed%", "%walkspeed%"},
                             new String[]{player.getName(),
                                     player.getUniqueId().toString(),
-                                    Objects.requireNonNull(player.getAddress()).getHostName(),
+                                    String.valueOf(Objects.requireNonNull(player.getAddress()).getAddress()),
                                     utils.getTimeFormat((int) finalFirstPlayed),
                                     utils.getTimeFormats((int) finaleOnlineTime),
                                     String.valueOf(player.getPing()),

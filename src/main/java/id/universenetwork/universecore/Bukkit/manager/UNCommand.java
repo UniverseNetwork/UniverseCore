@@ -39,11 +39,13 @@ public abstract class UNCommand {
             }
 
             switch (arg.toLowerCase()) {
-                case "self" -> {
+                case "self": {
                     callback.add((Player) sender);
                     return callback;
                 }
-                case "*", "@a", "@all" -> {
+                case "*":
+                case "@a":
+                case "@all": {
                     callback.addAll(Bukkit.getOnlinePlayers());
                     return callback;
                 }
@@ -66,7 +68,9 @@ public abstract class UNCommand {
         }
 
         switch (arg.toLowerCase()) {
-            case "*", "@a", "@all" -> {
+            case "*":
+            case "@a":
+            case "@all": {
                 callback.addAll(Bukkit.getOnlinePlayers());
                 return callback;
             }
@@ -92,11 +96,13 @@ public abstract class UNCommand {
             }
 
             switch (arg.toLowerCase()) {
-                case "self" -> {
+                case "self": {
                     callback.add((Player) sender);
                     return callback;
                 }
-                case "*", "@a", "@all" -> {
+                case "*":
+                case "@a":
+                case "@all": {
                     callback.addAll(Bukkit.getOnlinePlayers());
                     return callback;
                 }
@@ -119,7 +125,9 @@ public abstract class UNCommand {
         }
 
         switch (arg.toLowerCase()) {
-            case "*", "@a", "@all" -> {
+            case "*":
+            case "@a":
+            case "@all": {
                 callback.addAll(Bukkit.getOnlinePlayers());
                 return callback;
             }
