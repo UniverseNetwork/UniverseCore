@@ -14,15 +14,24 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class PlayerInfoCommand extends UNCommand {
 
     @CommandMethod("playerinfo|pi|uplayerinfo|upi [target]")
     public void commandPlayerInfo(
             final @NonNull CommandSender sender,
-            final @NonNull @Argument(value = "target", suggestions = "onePlayers") String targetName) {
+            final @NonNull @Argument(value = "target",
+                    defaultValue = "❤🗑🖇📎",
+                    suggestions = "onePlayers") String targetName) {
 
         if (!utils.checkPermission(sender, "playerinfo")) return;
+
+        if (targetName.equals("❤🗑🖇📎")) {
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.ADDSPECIFYPLAYER));
+            return;
+        }
 
         TargetsCallback targets = this.getTargets(sender, targetName);
 
@@ -30,7 +39,6 @@ public class PlayerInfoCommand extends UNCommand {
             utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.ONEPLAYER));
             return;
         }
-
 
         Player target = Bukkit.getPlayer(targetName);
         UUID uuid = null;

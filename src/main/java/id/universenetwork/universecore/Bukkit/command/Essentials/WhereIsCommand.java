@@ -22,7 +22,7 @@ public class WhereIsCommand extends UNCommand {
 
     @CommandMethod("whereis|wis|uwhereis|uwis [target]")
     public void commandWhereIs(final @NonNull CommandSender sender,
-                        final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
+                        final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "onePlayers") String targetName) {
         if (!utils.checkPermission(sender, "whereis")) return;
 
         TargetsCallback targets = this.getTargets(sender, targetName);
