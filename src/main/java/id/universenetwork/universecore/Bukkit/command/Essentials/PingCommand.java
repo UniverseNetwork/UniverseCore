@@ -33,7 +33,7 @@ public class PingCommand extends UNCommand {
         }
 
         if (!(sender instanceof Player) || targets.doesNotContain((Player) sender) && targetName.equals("self")) {
-            utils.sendMsg(sender, utils.getMsgString(MessageEnum.PINGCONSOLEMSG));
+            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.ADDSPECIFYPLAYER));
         }
 
         if (targetName.equals("self")) {

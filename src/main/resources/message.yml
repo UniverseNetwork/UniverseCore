@@ -18,7 +18,6 @@ ping-message:
 ping-other-message:
   - '&7- &b%player%&7 ping &8» &r%ping% ms'
   - '&7- Status: &r%status%'
-ping-console-message: '&7Ping mu &e0ms&7. kamu adalah console!'
 toggledrop-on: '&7ToggleDrop &aOn&7!'
 toggledrop-on-target: '&7ToggleDrop &aOn &7for &b%player%&7!'
 toggledrop-off: '&7ToggleDrop &cOff&7!'

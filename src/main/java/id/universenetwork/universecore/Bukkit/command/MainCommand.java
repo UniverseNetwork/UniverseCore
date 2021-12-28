@@ -32,7 +32,7 @@ public class MainCommand extends UNCommand {
     @CommandDescription("Help menu")
     private void commandHelp(
             final @NonNull CommandSender sender,
-            final @Argument("query") @Greedy String query
+            final @Argument(value = "query", suggestions = "commandList") @Greedy String query
     ) {
         core.getMinecraftHelp().queryCommands(query == null ? "" : query, sender);
     }
@@ -94,5 +94,10 @@ public class MainCommand extends UNCommand {
     public List<String> help(CommandContext<CommandSender> sender, String context) {
         return Stream.of("reload", "help", "info")
                 .filter(s -> s.toLowerCase().startsWith(context.toLowerCase())).collect(Collectors.toList());
+    }
+
+    @Suggestions("commandList")
+    public List<String> commandList(CommandContext<CommandSender> sender, String context) {
+        return core.getMinecraftHelp().getCommandManager().suggest(sender.getSender(), context.toLowerCase());
     }
 }

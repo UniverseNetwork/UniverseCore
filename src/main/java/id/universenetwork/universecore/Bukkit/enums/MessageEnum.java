@@ -22,7 +22,6 @@ public enum MessageEnum {
     KABOOMA("kaboom-all-player"),
     WHEREISMSG("whereis-message"),
     PINGMSG("ping-message"),
-    PINGCONSOLEMSG("ping-console-message"),
     PINGMSGO("ping-other-message"),
     GMCHANGE("gamemode-change"),
     GMCHANGEOTHERS("gamemode-change-other"),

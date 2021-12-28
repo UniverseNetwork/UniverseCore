@@ -18,7 +18,6 @@ import id.universenetwork.universecore.Bukkit.manager.ConfirmationManager;
 import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
-import id.universenetwork.universecore.Bukkit.manager.file.Whitelist;
 import id.universenetwork.universecore.Bukkit.utils.utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -143,13 +142,12 @@ public final class UniverseCore extends JavaPlugin {
         this.getLogger().info("Loading and registering commands...");
         try {
             ClassPath classPath = ClassPath.from(this.getClass().getClassLoader());
-            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(
-                    "id.universenetwork.universecore.Bukkit.command")) {
-                try {
-                    if (classInfo.getName().endsWith("WhitelistCommand") && classInfo.getName().endsWith("BroadCastCommand")) {
-                        continue;
-                    }
+            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("id.universenetwork.universecore.Bukkit.command")) {
+                if (classInfo.getName().endsWith("WhitelistCommand") || classInfo.getName().endsWith("BroadCastCommand") || classInfo.getName().contains(".test")) {
+                    continue;
+                }
 
+                try {
                     Class<?> commandClass = Class.forName(classInfo.getName());
                     this.parseAnnotationCommands(commandClass.newInstance());
                     this.getLogger().info("Registered command: " + commandClass.getSimpleName() + " #" + manager.getCommands().size());
