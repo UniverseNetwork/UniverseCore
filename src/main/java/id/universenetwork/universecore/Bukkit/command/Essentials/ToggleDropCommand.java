@@ -60,26 +60,27 @@ public class ToggleDropCommand extends UNCommand {
         });
 
 
-
-        if (others) {
-            if (targets.size() == 1) {
+        core.getConfirmationManager().requestConfirm(() -> {
+            if (others) {
+                if (targets.size() == 1) {
+                    targets.stream().findFirst().ifPresent(player -> {
+                        ToggleDropData td = new ToggleDropData(player.getUniqueId());
+                        utils.sendMsg(player, td.checkID(player.getUniqueId()) ?
+                                StringUtils.replace(utils.getMsgString(MessageEnum.TDONT), "%player%", player.getName()) :
+                                StringUtils.replace(utils.getMsgString(MessageEnum.TDOFFT), "%player%", player.getName()));
+                    });
+                } else {
+                    utils.sendMsg(sender, "&7Toggled drop for &e" + targets.size() + " &7players!");
+                }
+            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
                 targets.stream().findFirst().ifPresent(player -> {
                     ToggleDropData td = new ToggleDropData(player.getUniqueId());
                     utils.sendMsg(player, td.checkID(player.getUniqueId()) ?
                             StringUtils.replace(utils.getMsgString(MessageEnum.TDONT), "%player%", player.getName()) :
                             StringUtils.replace(utils.getMsgString(MessageEnum.TDOFFT), "%player%", player.getName()));
                 });
-            } else {
-                utils.sendMsg(sender, "&7Toggled drop for &e" + targets.size() + " &7players!");
             }
-        } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
-            targets.stream().findFirst().ifPresent(player -> {
-                ToggleDropData td = new ToggleDropData(player.getUniqueId());
-                utils.sendMsg(player, td.checkID(player.getUniqueId()) ?
-                        StringUtils.replace(utils.getMsgString(MessageEnum.TDONT), "%player%", player.getName()) :
-                        StringUtils.replace(utils.getMsgString(MessageEnum.TDOFFT), "%player%", player.getName()));
-            });
-        }
+        }, this.canSkip("toggledrop", targets, sender));
 
     }
 }
