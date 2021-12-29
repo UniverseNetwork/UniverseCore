@@ -28,39 +28,37 @@ public class ToggleDropCommand extends UNCommand {
             return;
         }
 
-
-        targets.forEach(player -> {
-            ToggleDropData td = new ToggleDropData(player.getUniqueId());
-            switch (toggle) {
-                case "none":
-                case "toggle": {
-                    if (!td.hasID()) {
+        core.getConfirmationManager().requestConfirm(() -> {
+            targets.forEach(player -> {
+                ToggleDropData td = new ToggleDropData(player.getUniqueId());
+                switch (toggle) {
+                    case "none":
+                    case "toggle": {
+                        if (!td.hasID()) {
+                            td.setId(player.getUniqueId(), true);
+                            utils.sendMsg(player, utils.getMsgString(MessageEnum.TDON));
+                            break;
+                        }
+                        td.removeID(player.getUniqueId());
+                        utils.sendMsg(player, utils.getMsgString(MessageEnum.TDOFF));
+                        break;
+                    }
+                    case "on": {
                         td.setId(player.getUniqueId(), true);
                         utils.sendMsg(player, utils.getMsgString(MessageEnum.TDON));
                         break;
                     }
-                    td.removeID(player.getUniqueId());
-                    utils.sendMsg(player, utils.getMsgString(MessageEnum.TDOFF));
-                    break;
+                    case "off": {
+                        td.removeID(player.getUniqueId());
+                        utils.sendMsg(player, utils.getMsgString(MessageEnum.TDOFF));
+                        break;
+                    }
+                    default: {
+                        utils.sendMsg(player, utils.getPrefix() + "&cWrong value!");
+                    }
                 }
-                case "on": {
-                    td.setId(player.getUniqueId(), true);
-                    utils.sendMsg(player, utils.getMsgString(MessageEnum.TDON));
-                    break;
-                }
-                case "off": {
-                    td.removeID(player.getUniqueId());
-                    utils.sendMsg(player, utils.getMsgString(MessageEnum.TDOFF));
-                    break;
-                }
-                default: {
-                    utils.sendMsg(player, utils.getPrefix() + "&cWrong value!");
-                }
-            }
-        });
+            });
 
-
-        core.getConfirmationManager().requestConfirm(() -> {
             if (others) {
                 if (targets.size() == 1) {
                     targets.stream().findFirst().ifPresent(player -> {
