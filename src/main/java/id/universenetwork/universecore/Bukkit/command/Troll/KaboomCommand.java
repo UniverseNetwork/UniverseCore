@@ -26,7 +26,6 @@ public class KaboomCommand extends UNCommand {
 
         TargetsCallback targets = this.getTargets(sender, targetName);
         if (targets.notifyIfEmpty()) {
-            utils.sendMsg(sender, utils.getPrefix() + utils.getMsgString(MessageEnum.NOPLAYER));
             return;
         }
 
