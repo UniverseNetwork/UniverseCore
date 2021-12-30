@@ -15,10 +15,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 public class CovidCommand extends UNCommand {
 
     @CommandMethod("covid|copid|covid19|ucovid|ucopid|ucovid19 [target]")

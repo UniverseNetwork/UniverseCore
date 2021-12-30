@@ -3,7 +3,6 @@ package id.universenetwork.universecore.Bukkit.command;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandDescription;
 import cloud.commandframework.annotations.CommandMethod;
-import cloud.commandframework.annotations.ProxiedBy;
 import cloud.commandframework.annotations.specifier.Greedy;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
@@ -13,14 +12,12 @@ import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
 import id.universenetwork.universecore.Bukkit.utils.utils;
-import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -78,13 +75,11 @@ public class MainCommand extends UNCommand {
         }
     }
 
-    @ProxiedBy("confirm")
     @CommandMethod("universecore|universe|uni|un|unc confirm|yes|accept")
     public void commandConfirm(final @NonNull Player player) {
         core.getConfirmationManager().confirm(player);
     }
 
-    @ProxiedBy("cancel")
     @CommandMethod("universecore|universe|uni|un|unc cancel|no|deny")
     public void commandDeclined(final @NonNull Player sender) {
         core.getConfirmationManager().deleteConfirmation(sender);

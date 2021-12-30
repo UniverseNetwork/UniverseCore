@@ -4,13 +4,13 @@ import cloud.commandframework.CommandTree;
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.arguments.parser.ParserParameters;
 import cloud.commandframework.arguments.parser.StandardParameters;
+import cloud.commandframework.bukkit.CloudBukkitCapabilities;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.meta.CommandMeta;
 import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.reflect.ClassPath;
-import id.universenetwork.universecore.Bukkit.command.Essentials.BroadCastCommand;
 import id.universenetwork.universecore.Bukkit.listener.JoinQuitListener;
 import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
 import id.universenetwork.universecore.Bukkit.listener.ToggleDropListener;
@@ -106,6 +106,14 @@ public final class UniverseCore extends JavaPlugin {
                 bukkitAudiences::sender,
                 this.manager);
 
+        if (this.manager.queryCapability(CloudBukkitCapabilities.BRIGADIER)) {
+            this.manager.registerBrigadier();
+        }
+
+        if (this.manager.queryCapability(CloudBukkitCapabilities.ASYNCHRONOUS_COMPLETION)) {
+            this.manager.registerAsynchronousCompletions();
+        }
+
         new MinecraftExceptionHandler<CommandSender>()
                 .withInvalidSyntaxHandler()
                 .withInvalidSenderHandler()
@@ -127,8 +135,6 @@ public final class UniverseCore extends JavaPlugin {
                 TextColor.color(5635925),
                 TextColor.color(5592405)));
 
-        new BroadCastCommand(this);
-
         this.commandRegister();
         utils.registerListener(
                 new JoinQuitListener(),
@@ -143,7 +149,7 @@ public final class UniverseCore extends JavaPlugin {
         try {
             ClassPath classPath = ClassPath.from(this.getClass().getClassLoader());
             for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive("id.universenetwork.universecore.Bukkit.command")) {
-                if (classInfo.getName().endsWith("WhitelistCommand") || classInfo.getName().endsWith("BroadCastCommand") || classInfo.getName().contains(".test")) {
+                if (classInfo.getName().endsWith("WhitelistCommand") || classInfo.getName().contains(".test")) {
                     continue;
                 }
 
