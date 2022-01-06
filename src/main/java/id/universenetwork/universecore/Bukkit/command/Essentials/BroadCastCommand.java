@@ -9,7 +9,6 @@ import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.utils.CenterMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -21,12 +20,12 @@ public class BroadCastCommand extends UNCommand {
     public void broadcastCommand(final @NonNull CommandSender sender,
                                  final @Argument(value = "message") @Greedy String message) {
 
+        System.out.println(" ");
+        System.out.println(CenterMessage.CenteredMessage("§e§lAnnouncement"));
+        System.out.println(" ");
+        System.out.println(message);
+        System.out.println(" ");
         for (Player all : Bukkit.getOnlinePlayers()) {
-            System.out.println(" ");
-            System.out.println(CenterMessage.CenteredMessage("§e§lAnnouncement"));
-            System.out.println(" ");
-            System.out.println(message);
-            System.out.println(" ");
             all.sendMessage(" ");
             CenterMessage.sendCentredMessage(all, "&e&lAnnouncement");
             all.sendMessage(" ");

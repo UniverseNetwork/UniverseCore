@@ -11,6 +11,7 @@ import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import cloud.commandframework.minecraft.extras.MinecraftHelp;
 import cloud.commandframework.paper.PaperCommandManager;
 import com.google.common.reflect.ClassPath;
+import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.listener.JoinQuitListener;
 import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
 import id.universenetwork.universecore.Bukkit.listener.ToggleDropListener;
@@ -23,7 +24,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -61,19 +61,17 @@ public final class UniverseCore extends JavaPlugin {
         instance = this;
         this.register();
         this.confirmationManager = new ConfirmationManager(this);
-        System.out.println("\nUniverseCore Has been enabled!\n" +
+        this.getLogger().info("\nUniverseCore Has been enabled!\n" +
                 "source: https://github.com/UniverseNetwork/UniverseCore\n" +
                 "website: https://universenetwork.id/");
         this.onEnableMessage();
-        System.out.println("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
-        System.out.println();
-        System.out.println();
+        this.getLogger().info("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
+        this.getLogger().info("");
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        this.saveAllConfig();
         this.onDisableMessage();
     }
 
@@ -115,6 +113,12 @@ public final class UniverseCore extends JavaPlugin {
         }
 
         new MinecraftExceptionHandler<CommandSender>()
+                .withNoPermissionHandler()
+                .withDecorator(component -> text()
+                        .append(text(utils.colors(utils.getMsgString(MessageEnum.NOPERM)))).build())
+                .apply(this.manager, bukkitAudiences::sender);
+
+        new MinecraftExceptionHandler<CommandSender>()
                 .withInvalidSyntaxHandler()
                 .withInvalidSenderHandler()
                 .withNoPermissionHandler()
@@ -122,9 +126,7 @@ public final class UniverseCore extends JavaPlugin {
                 .withCommandExecutionHandler()
                 .withDecorator(
                         component -> text()
-                                .append(text("[", NamedTextColor.DARK_GRAY))
-                                .append(text("Universe", NamedTextColor.GOLD))
-                                .append(text("] ", NamedTextColor.DARK_GRAY))
+                                .append(text(utils.colors(utils.getPrefix())))
                                 .append(component).build()
                 ).apply(this.manager, bukkitAudiences::sender);
 
