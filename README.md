@@ -1,8 +1,8 @@
-#UniverseCore
+# UniverseCore
 
 UniverseCore is a plugin for UniverseNetwork Minecraft server.
 
-#Commands
+# Commands
   - Essentials
     - Broadcast
     - Fly
