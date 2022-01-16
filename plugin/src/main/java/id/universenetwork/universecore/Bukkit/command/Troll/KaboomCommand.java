@@ -36,10 +36,12 @@ public class KaboomCommand extends UNCommand {
 
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
+                if (!targetName.equals("self") && sender instanceof Player) {
+                    if (player.getName().equals(sender.getName())) return;
+                }
                 player.setVelocity(player.getLocation().getDirection().setY(10));
                 Objects.requireNonNull(player.getLocation().getWorld()).strikeLightning(player.getLocation());
-                core.getMultiVersion().sendTitle(player, MessageFile.getInstance().getString(MessageEnum.KABOOMT), null,20,40,20);
-                player.sendTitle(MessageFile.getInstance().getString(MessageEnum.KABOOMT), null,20,40,20);
+                core.getMultiVersion().sendTitle(player, Utils.colors(MessageFile.getInstance().getString(MessageEnum.KABOOMT)), null,20,40,20);
             });
 
             if (others) {

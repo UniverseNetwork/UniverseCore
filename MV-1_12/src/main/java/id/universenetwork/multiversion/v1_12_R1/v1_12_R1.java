@@ -1,6 +1,7 @@
 package id.universenetwork.multiversion.v1_12_R1;
 
 import id.universenetwork.multiversion.MultiVersion;
+import net.minecraft.server.v1_12_R1.EnumParticle;
 import net.minecraft.server.v1_12_R1.IChatBaseComponent;
 import net.minecraft.server.v1_12_R1.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
@@ -69,4 +70,10 @@ public class v1_12_R1 extends MultiVersion {
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
         }
     }
+
+    @Override
+    public List<String> getParticleList(String context) {
+        return Arrays.stream(EnumParticle.values()).map(EnumParticle::name).filter(s -> s.startsWith(context.toUpperCase())).collect(Collectors.toList());
+    }
+
 }

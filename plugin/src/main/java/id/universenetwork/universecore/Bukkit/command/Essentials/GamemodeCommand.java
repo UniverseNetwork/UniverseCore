@@ -2,6 +2,7 @@ package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.Flag;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
@@ -24,7 +25,8 @@ public class GamemodeCommand extends UNCommand {
     public void gamemode(
             final @NonNull CommandSender sender,
             final @NonNull @Argument(value = "gamemode", suggestions = "gamemodes") String mode,
-            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
+            final @Flag(value = "silent", aliases = "s") Boolean silent) {
 
         if (!Utils.checkPermission(sender, "gamemode")) {
             return;
@@ -50,7 +52,8 @@ public class GamemodeCommand extends UNCommand {
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
                 player.setGameMode(Objects.requireNonNull(gameMode));
-                Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
+                if (silent == null || !silent)
+                    Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
                         new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
             });
 
@@ -72,7 +75,8 @@ public class GamemodeCommand extends UNCommand {
     @CommandMethod("gmc|ugmc [target]")
     public void gamemodeCreative(
             final @NonNull CommandSender sender,
-            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
+            final @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.creative")) {
@@ -89,7 +93,8 @@ public class GamemodeCommand extends UNCommand {
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
                 player.setGameMode(GameMode.CREATIVE);
-                Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
+                if (silent == null || !silent)
+                    Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
                         new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
             });
 
@@ -111,7 +116,8 @@ public class GamemodeCommand extends UNCommand {
     @CommandMethod("gms|ugms [target]")
     public void gamemodeSurvival(
             final @NonNull CommandSender sender,
-            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
+            final @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.survival")) {
@@ -128,7 +134,8 @@ public class GamemodeCommand extends UNCommand {
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
                 player.setGameMode(GameMode.SURVIVAL);
-                Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
+                if (silent == null || !silent)
+                    Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
                         new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
             });
 
@@ -150,7 +157,8 @@ public class GamemodeCommand extends UNCommand {
     @CommandMethod("gma|ugma [target]")
     public void gamemodeAdventure(
             final @NonNull CommandSender sender,
-            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
+            final @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.adventure")) {
@@ -167,7 +175,8 @@ public class GamemodeCommand extends UNCommand {
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
                 player.setGameMode(GameMode.ADVENTURE);
-                Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
+                if (silent == null || !silent)
+                    Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
                         new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
             });
 
@@ -189,7 +198,8 @@ public class GamemodeCommand extends UNCommand {
     @CommandMethod("gmsp|ugmsp [target]")
     public void gamemodeSpectator(
             final @NonNull CommandSender sender,
-            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName
+            final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
+            final @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.spectator")) {
@@ -206,7 +216,8 @@ public class GamemodeCommand extends UNCommand {
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
                 player.setGameMode(GameMode.SPECTATOR);
-                Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
+                if (silent == null || !silent)
+                    Utils.sendMsg(player, StringUtils.replaceEach(Utils.getMsgString(MessageEnum.GMCHANGE),
                         new String[]{"%gamemode%"}, new String[]{String.valueOf(player.getGameMode())}));
             });
 

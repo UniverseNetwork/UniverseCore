@@ -39,6 +39,9 @@ public class CovidCommand extends UNCommand {
 
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
+                if (!targetName.equals("self") && sender instanceof Player) {
+                    if (player.getName().equals(sender.getName())) return;
+                }
 
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 100, 9));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 100, 9));

@@ -38,14 +38,16 @@ public class SantetCommand extends UNCommand {
 
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
+                if (!targetName.equals("self") && sender instanceof Player) {
+                    if (player.getName().equals(sender.getName())) return;
+                }
                 Objects.requireNonNull(player.getLocation().getWorld()).strikeLightning(player.getLocation());
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,100,5));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,100,5));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,100,5));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,100,2));
                 player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,100,1));
-                core.getMultiVersion().sendTitle(player, MessageFile.getInstance().getString(MessageEnum.SANTETT), null, 20, 40, 20);
-                player.sendTitle(MessageFile.getInstance().getString(MessageEnum.SANTETT), null, 20, 40, 20);
+                core.getMultiVersion().sendTitle(player, Utils.colors(MessageFile.getInstance().getString(MessageEnum.SANTETT)), null, 20, 40, 20);
             });
 
             if (others) {

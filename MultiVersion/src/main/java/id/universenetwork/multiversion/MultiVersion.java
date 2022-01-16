@@ -15,12 +15,14 @@ public abstract class MultiVersion {
         this.plugin = plugin;
     }
 
-    public abstract List<String> getListItemByVersion(String context);
+    public abstract int getPing(Player player);
 
     public abstract double getMaxHealth(Player player);
 
-    public abstract int getPing(Player player);
-
     public abstract void sendTitle(Player player, String Title, String Subtitle, int fadeIn, int stay, int fadeOut);
+
+    public abstract List<String> getListItemByVersion(String context);
+
+    public abstract List<String> getParticleList(String context);
 
 }

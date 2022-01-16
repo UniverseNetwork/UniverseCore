@@ -5,6 +5,7 @@ import net.minecraft.server.v1_14_R1.IChatBaseComponent;
 import net.minecraft.server.v1_14_R1.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -69,6 +70,11 @@ public class v1_14_R1 extends MultiVersion {
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(st);
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
         }
+    }
+
+    @Override
+    public List<String> getParticleList(String context) {
+        return Arrays.stream(Particle.values()).map(Particle::name).filter(s -> s.startsWith(context.toUpperCase())).collect(Collectors.toList());
     }
 
 }

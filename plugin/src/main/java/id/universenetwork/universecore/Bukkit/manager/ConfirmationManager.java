@@ -19,7 +19,6 @@ public class ConfirmationManager {
     private final UniverseCore core;
     private final Map<Player, Callable> confirmMap = new HashMap<>();
 
-
     /**
      * Requests a confirmation before executing something
      *

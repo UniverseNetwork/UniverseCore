@@ -42,11 +42,13 @@ public class DuarDuarCommand extends UNCommand {
 
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
+                if (!targetName.equals("self") && sender instanceof Player) {
+                    if (player.getName().equals(sender.getName())) return;
+                }
                 for (int i = 0; i < amount; i++) {
                     Bukkit.getScheduler().runTaskLater(core, () -> {
                         randomLocation(player);
                         core.getMultiVersion().sendTitle(player, Utils.colors("&cDuar Duar"), null, 10, 10, 10);
-                        /*player.sendTitle(Utils.colors("&cDuar Duar"), null, 10, 10, 10);*/
                     }, i * (delay * 20));
                 }
             });

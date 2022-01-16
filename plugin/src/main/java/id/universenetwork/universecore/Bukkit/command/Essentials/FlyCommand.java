@@ -3,6 +3,7 @@ package id.universenetwork.universecore.Bukkit.command.Essentials;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.Flag;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.bukkit.command.CommandSender;
@@ -16,7 +17,8 @@ public class FlyCommand extends UNCommand {
     @CommandMethod("fly [target]")
     @CommandPermission("universenetwork.fly")
     public void flycmd(final @NonNull CommandSender sender,
-                       final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName) {
+                       final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
+                       final @Flag(value = "silent", aliases = "s") Boolean silent) {
 
         TargetsCallback targets = this.getTargets(sender, targetName);
 
@@ -33,23 +35,27 @@ public class FlyCommand extends UNCommand {
                     if (!player.getAllowFlight()) {
                         player.setAllowFlight(true);
                         player.setFlying(true);
-                        Utils.sendMsg(player, Utils.getPrefix() + "&aEnable &efly!");
+                        if (silent == null || !silent)
+                            Utils.sendMsg(player, Utils.getPrefix() + "&aEnable &efly!");
                     } else {
                         player.setAllowFlight(false);
                         player.setFlying(false);
-                        Utils.sendMsg(player, Utils.getPrefix() + "&cDisable &efly!");
+                        if (silent == null || !silent)
+                            Utils.sendMsg(player, Utils.getPrefix() + "&cDisable &efly!");
                     }
                 } else {
                     if (sudah_others.get()) {
                         sudah_others.set(true);
                         player.setAllowFlight(true);
                         player.setFlying(true);
-                        Utils.sendMsg(player, Utils.getPrefix() + "&aEnable &efly!");
+                        if (silent == null || !silent)
+                            Utils.sendMsg(player, Utils.getPrefix() + "&aEnable &efly!");
                     } else {
                         sudah_others.set(false);
                         player.setAllowFlight(false);
                         player.setFlying(false);
-                        Utils.sendMsg(player, Utils.getPrefix() + "&cDisable &efly!");
+                        if (silent == null || !silent)
+                            Utils.sendMsg(player, Utils.getPrefix() + "&cDisable &efly!");
                     }
                 }
             });

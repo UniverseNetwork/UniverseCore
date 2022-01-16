@@ -27,6 +27,12 @@ public enum MessageEnum {
     COVIDST("covid-subtitle"),
     COVIDS("covid-success"),
     COVIDSA("covid-all-player"),
+    FREEZET("freeze-title"),
+    FREEZES("freeze-success"),
+    FREEZESA("freeze-success-all"),
+    UNFREEZET("unfreeze-title"),
+    UNFREEZES("unfreeze-success"),
+    UNFREEZESA("unfreeze-success-all"),
 
     // Essentials Command Message Enum
     TDON("toggledrop-on"),
@@ -38,9 +44,15 @@ public enum MessageEnum {
     PINGMSGO("ping-other-message"),
     GMCHANGE("gamemode-change"),
     GMCHANGEOTHERS("gamemode-change-other"),
-    WLON("whitelist-on"),
+    HEALM("heal-message"),
+    HEALS("heal-success"),
+    HEALSA("heal-success-all"),
+    FEEDM("feed-message"),
+    FEEDS("feed-success"),
+    FEEDSA("feed-success-all"),
+/*    WLON("whitelist-on"),
     WLOFF("whitelist-off"),
-    WLMSG("whitelist-message"),
+    WLMSG("whitelist-message"),*/
     PIMSG("playerinfo-message");
 
     private final String path;

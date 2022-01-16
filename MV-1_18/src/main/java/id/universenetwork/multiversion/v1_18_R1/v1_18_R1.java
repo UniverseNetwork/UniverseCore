@@ -1,9 +1,12 @@
 package id.universenetwork.multiversion.v1_18_R1;
 
 import id.universenetwork.multiversion.MultiVersion;
+import net.minecraft.world.food.FoodMetaData;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -35,6 +38,11 @@ public class v1_18_R1 extends MultiVersion {
     @Override
     public void sendTitle(Player player, String title, String subtitle, int fadeIn, int stay, int fadeOut) {
         player.sendTitle(title == null ? " " : title, subtitle == null ? " " : subtitle, fadeIn, stay, fadeOut);
+    }
+
+    @Override
+    public List<String> getParticleList(String context) {
+        return Arrays.stream(Particle.values()).map(Particle::name).filter(s -> s.startsWith(context.toUpperCase())).collect(Collectors.toList());
     }
 
 }

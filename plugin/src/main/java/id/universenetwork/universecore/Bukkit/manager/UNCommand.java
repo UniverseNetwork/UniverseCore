@@ -198,12 +198,12 @@ public abstract class UNCommand {
         players.add("*");
         players.add("@a");
         players.add("@all");
-        return players.stream().filter(s -> s.toLowerCase().startsWith(context.toLowerCase())).collect(Collectors.toList());
+        return players.stream().filter(s -> s.startsWith(context)).collect(Collectors.toList());
     }
 
     @Suggestions("onePlayers")
     public List<String> onePlayer(CommandContext<CommandSender> sender, String context) {
-        return Utils.getOnlinePlayers(context.toLowerCase());
+        return Utils.getOnlinePlayers(context);
     }
 
     @Suggestions("toggles")

@@ -2,6 +2,7 @@ package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.Flag;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
@@ -20,7 +21,8 @@ public class GiveCommand extends UNCommand {
     public void commandGive(final @NonNull CommandSender sender,
                         final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
                         final @NonNull @Argument(value = "item", defaultValue = "dirt", suggestions = "materials") Material material,
-                        final @NonNull @Argument(value = "amount", defaultValue = "1") Integer amount) {
+                        final @NonNull @Argument(value = "amount", defaultValue = "1") Integer amount,
+                        final @Flag(value = "silent", aliases = "s") Boolean silent) {
         if (!Utils.checkPermission(sender, "give")) {
             return;
         }
@@ -33,14 +35,15 @@ public class GiveCommand extends UNCommand {
             targets.stream().forEach(player -> {
                 player.getInventory().addItem(item);
                 player.updateInventory();
-                Utils.sendMsg(player, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType().toString() + "&7.");
+                if (silent == null || !silent)
+                    Utils.sendMsg(player, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType() + "&7.");
             });
 
             if (targets.size() > 1) {
-                Utils.sendMsg(sender, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType().toString() + " &7to &6" + targets.size() + " players&7.");
+                Utils.sendMsg(sender, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType() + " &7to &6" + targets.size() + " players&7.");
             } else if ((!(sender instanceof Player)) || targets.doesNotContain((Player) sender) && !targetName.equals("self")) {
                 targets.stream().findFirst().ifPresent(player ->
-                        Utils.sendMsg(sender, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType().toString() + " &7to &6" + player.getName() + " players&7."));
+                        Utils.sendMsg(sender, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType() + " &7to &6" + player.getName() + " players&7."));
             }
         }, this.canSkip("give item", targets, sender));
     }
@@ -57,7 +60,7 @@ public class GiveCommand extends UNCommand {
 
         player.getInventory().addItem(item);
         player.updateInventory();
-        Utils.sendMsg(player, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType().toString() + "&7.");
+        Utils.sendMsg(player, Utils.getPrefix() + "&7You have been given &a" + amount + " &e" + item.getType() + "&7.");
     }
 
     @Suggestions("materials")

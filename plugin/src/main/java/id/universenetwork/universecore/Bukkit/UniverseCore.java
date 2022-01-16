@@ -14,6 +14,7 @@ import com.google.common.base.Joiner;
 import com.google.common.reflect.ClassPath;
 import id.universenetwork.multiversion.MultiVersion;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
+import id.universenetwork.universecore.Bukkit.listener.FreezeListener;
 import id.universenetwork.universecore.Bukkit.listener.JoinQuitListener;
 import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
 import id.universenetwork.universecore.Bukkit.listener.ToggleDropListener;
@@ -144,7 +145,7 @@ public final class UniverseCore extends JavaPlugin {
         Utils.registerListener(
                 new JoinQuitListener(),
                 new ToggleDropListener(),
-                new SuggestionListener()
+                new FreezeListener()
                 );
     }
 
@@ -202,31 +203,37 @@ public final class UniverseCore extends JavaPlugin {
                     break;
                 }
                 case "v1_13_R1": {
+                    Bukkit.getPluginManager().registerEvents(new SuggestionListener(), this);
                     support = Class.forName("id.universenetwork.multiversion.v1_13_R2.v1_13_R2");
                     this.getLogger().info("Loaded multi version v1_13_R2");
                     break;
                 }
                 case "v1_14_R1": {
+                    Bukkit.getPluginManager().registerEvents(new SuggestionListener(), this);
                     support = Class.forName("id.universenetwork.multiversion.v1_14_R1.v1_14_R1");
                     this.getLogger().info("Loaded multi version v1_14_R1");
                     break;
                 }
                 case "v1_15_R1": {
+                    Bukkit.getPluginManager().registerEvents(new SuggestionListener(), this);
                     support = Class.forName("id.universenetwork.multiversion.v1_15_R1.v1_15_R1");
                     this.getLogger().info("Loaded multi version v1_15_R1");
                     break;
                 }
                 case "v1_16_R3": {
+                    Bukkit.getPluginManager().registerEvents(new SuggestionListener(), this);
                     support = Class.forName("id.universenetwork.multiversion.v1_16_R3.v1_16_R3");
                     this.getLogger().info("Loaded multi version v1_16_R3");
                     break;
                 }
                 case "v1_17_R1": {
+                    Bukkit.getPluginManager().registerEvents(new SuggestionListener(), this);
                     support = Class.forName("id.universenetwork.multiversion.v1_17_R1.v1_17_R1");
                     this.getLogger().info("Loaded multi version v1_17_R1");
                     break;
                 }
                 case "v1_18_R1": {
+                    Bukkit.getPluginManager().registerEvents(new SuggestionListener(), this);
                     support = Class.forName("id.universenetwork.multiversion.v1_18_R1.v1_18_R1");
                     this.getLogger().info("Loaded multi version v1_18_R1");
                     break;

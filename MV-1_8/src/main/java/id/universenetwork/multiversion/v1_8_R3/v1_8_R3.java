@@ -1,6 +1,7 @@
 package id.universenetwork.multiversion.v1_8_R3;
 
 import id.universenetwork.multiversion.MultiVersion;
+import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import org.bukkit.Bukkit;
@@ -8,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
@@ -69,6 +71,11 @@ public class v1_8_R3 extends MultiVersion {
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(st);
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(length);
         }
+    }
+
+    @Override
+    public List<String> getParticleList(String context) {
+        return Arrays.stream(EnumParticle.values()).map(EnumParticle::name).filter(s -> s.startsWith(context.toUpperCase())).collect(Collectors.toList());
     }
 
 }
