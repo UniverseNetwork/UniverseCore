@@ -12,6 +12,8 @@ UniverseCore is a plugin for UniverseNetwork Minecraft server.
     - PlayerInfo
     - ToggleDrop
     - WhereIs
+    - Heal
+    - Feed
     
 
   - Troll
@@ -19,3 +21,4 @@ UniverseCore is a plugin for UniverseNetwork Minecraft server.
      - DuarDuar
      - Santet
      - Kaboom
+     - Freeze

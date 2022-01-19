@@ -8,8 +8,12 @@ import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Particle;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class HealCommand extends UNCommand {
@@ -28,6 +32,11 @@ public class HealCommand extends UNCommand {
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {
                 player.setHealth(core.getMultiVersion().getMaxHealth(player));
+                player.setFoodLevel(20);
+                player.setFireTicks(0);
+                for (PotionEffect potion : player.getActivePotionEffects()) {
+                    player.removePotionEffect(potion.getType());
+                }
                 if (silent == null || !silent) Utils.sendMsg(player, Utils.getPrefix() + Utils.getMsgString(MessageEnum.HEALM));
             });
 
