@@ -14,13 +14,11 @@ import com.google.common.base.Joiner;
 import com.google.common.reflect.ClassPath;
 import id.universenetwork.multiversion.MultiVersion;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
-import id.universenetwork.universecore.Bukkit.listener.FreezeListener;
-import id.universenetwork.universecore.Bukkit.listener.JoinQuitListener;
-import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
-import id.universenetwork.universecore.Bukkit.listener.ToggleDropListener;
+import id.universenetwork.universecore.Bukkit.listener.*;
 import id.universenetwork.universecore.Bukkit.manager.ConfirmationManager;
 import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
+import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
 import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import lombok.Getter;
@@ -83,6 +81,7 @@ public final class UniverseCore extends JavaPlugin {
         Config.getInstance().saveConfig();
         MessageFile.getInstance().saveConfig();
         SuggestionBlocker.getInstance().saveConfig();
+        PlayerData.getInstance().saveConfig();
     }
 
     @SneakyThrows
@@ -90,6 +89,7 @@ public final class UniverseCore extends JavaPlugin {
         Config.cfg.saveDefaultConfig();
         MessageFile.message.saveDefaultConfig();
         SuggestionBlocker.message.saveDefaultConfig();
+        PlayerData.config.saveDefaultConfig();
 
         Function<CommandTree<CommandSender>, CommandExecutionCoordinator<CommandSender>> executionCoordinatorFunction = CommandExecutionCoordinator.simpleCoordinator();
         Function<CommandSender, CommandSender> mapperFunction = Function.identity();
@@ -145,7 +145,8 @@ public final class UniverseCore extends JavaPlugin {
         Utils.registerListener(
                 new JoinQuitListener(),
                 new ToggleDropListener(),
-                new FreezeListener()
+                new FreezeListener(),
+                new GodListener()
                 );
     }
 
@@ -253,7 +254,7 @@ public final class UniverseCore extends JavaPlugin {
     }
 
     public void onEnableMessage() {
-        Bukkit.getLogger().info(Utils.colors( "\n" +
+        Bukkit.getLogger().info(Utils.colors( "\n"+"\n" +
                 "&b██    ██ &e███   ██ &a █████   █████  ██████  ███████  &7Server Version: &6" + Bukkit.getServer().getVersion() + "\n" +
                 "&b██    ██ &e████  ██ &a██   ██ ██   ██ ██   ██ ██       &7Version: &6 " + this.getDescription().getVersion() + "\n" +
                 "&b██    ██ &e██ ██ ██ &a██      ██   ██ ██████  █████    &7Author: &e" + Joiner.on(", ").join(this.getDescription().getAuthors()) + "\n" +
@@ -263,7 +264,7 @@ public final class UniverseCore extends JavaPlugin {
     }
 
     public void onDisableMessage() {
-        Bukkit.getLogger().info(Utils.colors( "\n" +
+        Bukkit.getLogger().info(Utils.colors( "\n"+"\n" +
                 "&b██    ██ &e███   ██ &a █████   █████  ██████  ███████  &7Server Version: &6" + Bukkit.getServer().getVersion() + "\n" +
                 "&b██    ██ &e████  ██ &a██   ██ ██   ██ ██   ██ ██       &7Version: &6" + this.getDescription().getVersion() + "\n" +
                 "&b██    ██ &e██ ██ ██ &a██      ██   ██ ██████  █████    &7Author: &e" + Joiner.on(", ").join(this.getDescription().getAuthors()) + "\n" +

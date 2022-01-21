@@ -4,6 +4,7 @@
 Settings:
   # use or not confirmation for command
   use-confirmation: true
+  max-player-to-execute-confirmation: 2
 
 JoinMessage:
   Enabled: true

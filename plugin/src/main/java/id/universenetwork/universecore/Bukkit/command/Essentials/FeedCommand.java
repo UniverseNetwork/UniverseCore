@@ -14,7 +14,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 public class FeedCommand extends UNCommand {
 
-    @CommandMethod("feed [target]")
+    @CommandMethod("feed|ufeed [target]")
     public void feedCMD(final @NonNull CommandSender sender,
                         final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
                         final @Flag(value = "silent", aliases = "s") Boolean silent) {

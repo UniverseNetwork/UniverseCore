@@ -155,7 +155,7 @@ public abstract class UNCommand {
             }
         }
 
-        if (targetsCallback.size() >= 2) {
+        if (targetsCallback.size() >= Config.cfg.getInt(ConfigEnum.MAXPLAYERCONFIRM.getPath())) {
             return new CanSkipCallback(sender, false, Collections.singletonList(
                     Utils.colors(Utils.getPrefix() + "&7Are you sure want to execute &e" + action + " &7on &a" + targetsCallback.size() + " &7players?")
             ));

@@ -3,6 +3,7 @@ package id.universenetwork.universecore.Bukkit.enums;
 public enum ConfigEnum {
 
     USECONFIRMATION("Settings.use-confirmation"),
+    MAXPLAYERCONFIRM("Settings.max-player-to-execute-confirmation"),
     JENABLE("JoinMessage.Enabled"),
     JCENTER("JoinMessage.Centered"),
     JMSG("JoinMessage.Message"),

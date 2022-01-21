@@ -10,6 +10,7 @@ import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
 import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
+import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
 import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.bukkit.command.CommandSender;
@@ -54,6 +55,7 @@ public class MainCommand extends UNCommand {
                         Config.getInstance().reload();
                         MessageFile.getInstance().reload();
                         SuggestionBlocker.getInstance().reload();
+                        PlayerData.getInstance().reload();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

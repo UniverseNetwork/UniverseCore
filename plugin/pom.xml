@@ -148,6 +148,7 @@
                     <include>plugin.yml</include>
                     <include>config.yml</include>
                     <include>message.yml</include>
+                    <include>playerdata.yml</include>
                     <include>suggestion-blocker.yml</include>
                 </includes>
             </resource>
