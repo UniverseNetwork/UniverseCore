@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class HealCommand extends UNCommand {
 
@@ -19,7 +20,7 @@ public class HealCommand extends UNCommand {
     @CommandPermission("universenetwork.heal")
     public void healCMD(final @NonNull CommandSender sender,
                         final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-                        final @Flag(value = "silent", aliases = "s") Boolean silent) {
+                        final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent) {
 
         TargetsCallback targets = this.getTargets(sender, targetName);
 

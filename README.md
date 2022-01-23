@@ -14,6 +14,7 @@ UniverseCore is a plugin for UniverseNetwork Minecraft server.
     - WhereIs
     - Heal
     - Feed
+    - God
     
 
   - Troll

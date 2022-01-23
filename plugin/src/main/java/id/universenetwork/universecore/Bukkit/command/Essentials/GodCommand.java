@@ -43,12 +43,12 @@ public class GodCommand extends UNCommand {
 
             if (others) {
                 if (targets.size() == 1) {
-                    targets.stream().findFirst().ifPresent(player -> Utils.sendMsg(player, "&7Toggled god mode for &a" + player.getName()));
+                    targets.stream().findFirst().ifPresent(player -> Utils.sendMsg(sender, "&7Toggled god mode for &a" + player.getName()));
                 } else {
                     Utils.sendMsg(sender, "&7Toggled godMode for &e" + targets.size() + " &7players!");
                 }
             } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
-                targets.stream().findFirst().ifPresent(player -> Utils.sendMsg(player, "&7Toggled god mode for &a" + player.getName()));
+                targets.stream().findFirst().ifPresent(player -> Utils.sendMsg(sender, "&7Toggled god mode for &a" + player.getName()));
             }
 
         }, this.canSkip("god all", targets, sender));

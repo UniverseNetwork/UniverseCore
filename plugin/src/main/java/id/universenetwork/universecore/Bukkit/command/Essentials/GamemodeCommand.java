@@ -13,6 +13,7 @@ import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +27,7 @@ public class GamemodeCommand extends UNCommand {
             final @NonNull CommandSender sender,
             final @NonNull @Argument(value = "gamemode", suggestions = "gamemodes") String mode,
             final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-            final @Flag(value = "silent", aliases = "s") Boolean silent) {
+            final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent) {
 
         if (!Utils.checkPermission(sender, "gamemode")) {
             return;
@@ -76,7 +77,7 @@ public class GamemodeCommand extends UNCommand {
     public void gamemodeCreative(
             final @NonNull CommandSender sender,
             final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-            final @Flag(value = "silent", aliases = "s") Boolean silent
+            final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.creative")) {
@@ -117,7 +118,7 @@ public class GamemodeCommand extends UNCommand {
     public void gamemodeSurvival(
             final @NonNull CommandSender sender,
             final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-            final @Flag(value = "silent", aliases = "s") Boolean silent
+            final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.survival")) {
@@ -158,7 +159,7 @@ public class GamemodeCommand extends UNCommand {
     public void gamemodeAdventure(
             final @NonNull CommandSender sender,
             final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-            final @Flag(value = "silent", aliases = "s") Boolean silent
+            final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.adventure")) {
@@ -199,7 +200,7 @@ public class GamemodeCommand extends UNCommand {
     public void gamemodeSpectator(
             final @NonNull CommandSender sender,
             final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-            final @Flag(value = "silent", aliases = "s") Boolean silent
+            final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent
     ) {
 
         if (!Utils.checkPermission(sender, "gamemode.spectator")) {

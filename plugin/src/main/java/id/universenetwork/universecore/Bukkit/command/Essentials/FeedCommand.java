@@ -11,13 +11,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class FeedCommand extends UNCommand {
 
     @CommandMethod("feed|ufeed [target]")
     public void feedCMD(final @NonNull CommandSender sender,
                         final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-                        final @Flag(value = "silent", aliases = "s") Boolean silent) {
+                        final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent) {
 
         TargetsCallback targets = this.getTargets(sender, targetName);
 

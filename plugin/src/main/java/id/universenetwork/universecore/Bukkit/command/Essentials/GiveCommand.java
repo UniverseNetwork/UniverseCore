@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class GiveCommand extends UNCommand {
                         final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
                         final @NonNull @Argument(value = "item", defaultValue = "dirt", suggestions = "materials") Material material,
                         final @NonNull @Argument(value = "amount", defaultValue = "1") Integer amount,
-                        final @Flag(value = "silent", aliases = "s") Boolean silent) {
+                        final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent) {
         if (!Utils.checkPermission(sender, "give")) {
             return;
         }

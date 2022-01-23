@@ -43,7 +43,11 @@ public class PlayerData {
     }
 
     public ConfigurationSection getSection(String path) {
-        return Objects.requireNonNull(config.getConfig().getConfigurationSection(path));
+        if (Objects.isNull(getConfig().getConfigurationSection(path))) {
+            return null;
+        } else {
+            return getConfig().getConfigurationSection(path);
+        }
     }
 
     public void set(String path, Object value) {

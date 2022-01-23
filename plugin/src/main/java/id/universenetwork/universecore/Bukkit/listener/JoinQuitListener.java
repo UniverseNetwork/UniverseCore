@@ -1,12 +1,14 @@
 package id.universenetwork.universecore.Bukkit.listener;
 
 import com.google.common.base.Joiner;
+import id.universenetwork.universecore.Bukkit.UniverseCore;
 import id.universenetwork.universecore.Bukkit.enums.ConfigEnum;
 import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
 import id.universenetwork.universecore.Bukkit.utils.CenterMessage;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +39,13 @@ public class JoinQuitListener implements Listener {
             }
         }
         PlayerData playerData = new PlayerData();
+
+        if (playerData.getString(player.getUniqueId().toString()) == null) {
+            return;
+        }
+
         Iterator<String> list = playerData.getSection(player.getUniqueId().toString()).getKeys(false).iterator();
+
         if (list.hasNext()) {
             String key = list.next();
             if (playerData.hasPlayerData(player, key)) {
@@ -54,7 +62,7 @@ public class JoinQuitListener implements Listener {
                         }
                     }
                 }
-                Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray()) + " &7is &aON");
+                Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () -> Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray()) + " &7is &aON"), 10L);
             }
         }
     }

@@ -10,6 +10,7 @@ import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -19,7 +20,7 @@ public class FlyCommand extends UNCommand {
     @CommandPermission("universenetwork.fly")
     public void flycmd(final @NonNull CommandSender sender,
                        final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
-                       final @Flag(value = "silent", aliases = "s") Boolean silent) {
+                       final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent) {
 
         TargetsCallback targets = this.getTargets(sender, targetName);
 
