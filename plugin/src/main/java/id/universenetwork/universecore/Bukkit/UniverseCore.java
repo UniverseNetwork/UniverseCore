@@ -15,7 +15,8 @@ import com.google.common.reflect.ClassPath;
 import id.universenetwork.multiversion.MultiVersion;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.listener.*;
-import id.universenetwork.universecore.Bukkit.manager.ConfirmationManager;
+import id.universenetwork.universecore.Bukkit.manager.confirmation.ConfirmationManager;
+import id.universenetwork.universecore.Bukkit.manager.cooldown.CooldownManager;
 import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
@@ -33,6 +34,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static net.kyori.adventure.text.Component.text;
@@ -54,6 +56,8 @@ public final class UniverseCore extends JavaPlugin {
 
     private static UniverseCore instance;
 
+    private CooldownManager cooldownManager;
+
     public static UniverseCore getInstance() {
         return UniverseCore.instance;
     }
@@ -65,7 +69,9 @@ public final class UniverseCore extends JavaPlugin {
         instance = this;
         this.loadMultiVersion();
         this.register();
+        this.smartDeleteCooldowns();
         this.confirmationManager = new ConfirmationManager(this);
+        this.cooldownManager = new CooldownManager(this);
         this.onEnableMessage();
         this.getLogger().info("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
         this.getLogger().info("");
@@ -140,6 +146,19 @@ public final class UniverseCore extends JavaPlugin {
                 TextColor.color(11184810),
                 TextColor.color(5635925),
                 TextColor.color(5592405)));
+
+        /*DependencyHelper helper = new DependencyHelper(UniverseCore.class.getClassLoader());
+        File dir = new File("plugins/UniverseCore/libs");
+        Map<String, String> depencies = new HashMap<>();
+        depencies.put("H2-2.1.210.jar", "https://repo1.maven.org/maven2/com/h2database/h2/2.1.210/h2-2.1.210.jar");
+        depencies.put("HikariCP-3.3.0.jar", "https://repo1.maven.org/maven2/com/zaxxer/HikariCP/3.3.0/HikariCP-3.3.0.jar");
+        try {
+            helper.download(depencies, dir.toPath());
+            helper.loadDir(dir.toPath());
+        } catch (IOException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        Bukkit.getLogger().info("[UniverseCore] Dependencies loaded!");*/
 
         this.commandRegister();
         Utils.registerListener(
@@ -251,6 +270,18 @@ public final class UniverseCore extends JavaPlugin {
             e.printStackTrace();
         }
 
+    }
+
+    private void smartDeleteCooldowns() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
+            for (UUID uuid : getCooldownManager().getCooldowns().rowKeySet()) {
+                for (String type : getCooldownManager().getCooldowns().row(uuid).keySet()) {
+                    if (getCooldownManager().getCooldowns().get(uuid, type) <= System.currentTimeMillis()) {
+                        getCooldownManager().getCooldowns().remove(uuid, type);
+                    }
+                }
+            }
+        }, 1, 1);
     }
 
     public void onEnableMessage() {

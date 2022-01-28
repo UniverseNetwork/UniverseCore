@@ -2,9 +2,11 @@ package id.universenetwork.universecore.Bukkit.command.Essentials;
 
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
+import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.Flag;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
+import id.universenetwork.universecore.Bukkit.manager.cooldown.CooldownManager;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
@@ -16,6 +18,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class FeedCommand extends UNCommand {
 
     @CommandMethod("feed|ufeed [target]")
+    @CommandPermission("universenetwork.feed")
     public void feedCMD(final @NonNull CommandSender sender,
                         final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players") String targetName,
                         final @Nullable @Flag(value = "silent", aliases = "s") Boolean silent) {
@@ -25,31 +28,33 @@ public class FeedCommand extends UNCommand {
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !Utils.checkPermission(sender, "feed", true)) return;
 
-        core.getConfirmationManager().requestConfirm(() -> {
-            targets.stream().forEach(player -> {
-                feedPlayer(player);
-                if (silent == null || !silent) Utils.sendMsg(player, Utils.getPrefix() + Utils.getMsgString(MessageEnum.FEEDM));
-            });
+        core.getCooldownManager().requestCooldown(() -> {
+            core.getConfirmationManager().requestConfirm(() -> {
+                targets.stream().forEach(player -> {
+                    feedPlayer(player);
+                    if (silent == null || !silent) Utils.sendMsg(player, Utils.getPrefix() + Utils.getMsgString(MessageEnum.FEEDM));
+                });
 
-            if (others) {
-                if (targets.size() == 1) {
+                if (others) {
+                    if (targets.size() == 1) {
+                        targets.stream().findFirst().ifPresent(player -> {
+                            Utils.sendMsg(sender, Utils.getPrefix() +
+                                    StringUtils.replace(Utils.getMsgString(MessageEnum.FEEDS),
+                                            "%player%", player.getName()));
+                        });
+                    } else {
+                        Utils.sendMsg(sender, Utils.getPrefix() + StringUtils.replace(Utils.getMsgString(MessageEnum.FEEDSA),
+                                "%player%", String.valueOf(targets.size())));
+                    }
+                } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
                     targets.stream().findFirst().ifPresent(player -> {
                         Utils.sendMsg(sender, Utils.getPrefix() +
                                 StringUtils.replace(Utils.getMsgString(MessageEnum.FEEDS),
                                         "%player%", player.getName()));
                     });
-                } else {
-                    Utils.sendMsg(sender, Utils.getPrefix() + StringUtils.replace(Utils.getMsgString(MessageEnum.FEEDSA),
-                            "%player%", String.valueOf(targets.size())));
                 }
-            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
-                targets.stream().findFirst().ifPresent(player -> {
-                    Utils.sendMsg(sender, Utils.getPrefix() +
-                            StringUtils.replace(Utils.getMsgString(MessageEnum.FEEDS),
-                                    "%player%", player.getName()));
-                });
-            }
-        }, this.canSkip("feed all", targets, sender));
+            }, this.canSkip("feed all", targets, sender));
+        }, core.getCooldownManager().canSkipCooldown("feed", 300, "feed", sender));
     }
 
     private void feedPlayer(Player player) {

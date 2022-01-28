@@ -6,6 +6,7 @@ import cloud.commandframework.annotations.CommandPermission;
 import cloud.commandframework.annotations.Flag;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
+import id.universenetwork.universecore.Bukkit.manager.cooldown.CooldownManager;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.CommandSender;
@@ -14,8 +15,10 @@ import org.bukkit.potion.PotionEffect;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public class HealCommand extends UNCommand {
+import java.util.HashMap;
+import java.util.Map;
 
+public class HealCommand extends UNCommand {
     @CommandMethod("heal|uheal [target]")
     @CommandPermission("universenetwork.heal")
     public void healCMD(final @NonNull CommandSender sender,
@@ -27,36 +30,49 @@ public class HealCommand extends UNCommand {
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !Utils.checkPermission(sender, "heal", true)) return;
 
-        core.getConfirmationManager().requestConfirm(() -> {
-            targets.stream().forEach(player -> {
-                player.setHealth(core.getMultiVersion().getMaxHealth(player));
-                player.setFoodLevel(20);
-                player.setFireTicks(0);
-                for (PotionEffect potion : player.getActivePotionEffects()) {
-                    player.removePotionEffect(potion.getType());
-                }
-                if (silent == null || !silent) Utils.sendMsg(player, Utils.getPrefix() + Utils.getMsgString(MessageEnum.HEALM));
-            });
+        /*Map<Player, Boolean> heal = new HashMap<>();*/
 
-            if (others) {
-                if (targets.size() == 1) {
+        core.getCooldownManager().requestCooldown(() -> {
+            core.getConfirmationManager().requestConfirm(() -> {
+                /*if (sender instanceof Player && !others) {
+                    if (core.getCooldownManager().hasCooldown(((Player) sender).getUniqueId(), "heal")) {
+                        Utils.sendMsg(sender, "&cYou can't heal for another &e" + core.getCooldownManager().getCooldown(((Player) sender).getUniqueId(), "heal") + " &cseconds");
+                    }
+                }*/
+                targets.stream().forEach(player -> {
+                    player.setHealth(core.getMultiVersion().getMaxHealth(player));
+                    player.setFoodLevel(20);
+                    player.setFireTicks(0);
+                    for (PotionEffect potion : player.getActivePotionEffects()) {
+                        player.removePotionEffect(potion.getType());
+                    }
+                    if (silent == null || !silent) Utils.sendMsg(player, Utils.getPrefix() + Utils.getMsgString(MessageEnum.HEALM));
+                    /*if (!others){
+                        heal.put(player, true);
+                        core.getCooldownManager().setCooldown(player.getUniqueId(), "heal", 5);
+                    }*/
+                });
+
+                if (others) {
+                    if (targets.size() == 1) {
+                        targets.stream().findFirst().ifPresent(player -> {
+                            Utils.sendMsg(sender, Utils.getPrefix() +
+                                    StringUtils.replace(Utils.getMsgString(MessageEnum.HEALS),
+                                            "%player%", player.getName()));
+                        });
+                    } else {
+                        Utils.sendMsg(sender, Utils.getPrefix() + StringUtils.replace(Utils.getMsgString(MessageEnum.HEALSA),
+                                "%player%", String.valueOf(targets.size())));
+                    }
+                } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
                     targets.stream().findFirst().ifPresent(player -> {
                         Utils.sendMsg(sender, Utils.getPrefix() +
                                 StringUtils.replace(Utils.getMsgString(MessageEnum.HEALS),
                                         "%player%", player.getName()));
                     });
-                } else {
-                    Utils.sendMsg(sender, Utils.getPrefix() + StringUtils.replace(Utils.getMsgString(MessageEnum.HEALSA),
-                            "%player%", String.valueOf(targets.size())));
                 }
-            } else if (!(sender instanceof Player) || targets.doesNotContain((Player) sender)) {
-                targets.stream().findFirst().ifPresent(player -> {
-                    Utils.sendMsg(sender, Utils.getPrefix() +
-                            StringUtils.replace(Utils.getMsgString(MessageEnum.HEALS),
-                                    "%player%", player.getName()));
-                });
-            }
-        }, this.canSkip("heal all", targets, sender));
+            }, this.canSkip("heal all", targets, sender));
+        }, core.getCooldownManager().canSkipCooldown("heal", 5, "heal", sender));
 
     }
 

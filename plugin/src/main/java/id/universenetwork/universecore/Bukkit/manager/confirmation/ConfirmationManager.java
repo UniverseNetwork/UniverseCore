@@ -1,4 +1,4 @@
-package id.universenetwork.universecore.Bukkit.manager;
+package id.universenetwork.universecore.Bukkit.manager.confirmation;
 
 import id.universenetwork.universecore.Bukkit.UniverseCore;
 import id.universenetwork.universecore.Bukkit.manager.callbacks.CanSkipCallback;

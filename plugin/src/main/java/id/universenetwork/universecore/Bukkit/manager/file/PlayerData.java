@@ -68,7 +68,7 @@ public class PlayerData {
 
     public boolean hasPlayerData(Player player, String type) {
         String types = player.getUniqueId() + "." + type;
-        return getConfig().contains(types);
+        return getConfig().getBoolean(types);
     }
 
     public Boolean getStatus(Player player, String type) {

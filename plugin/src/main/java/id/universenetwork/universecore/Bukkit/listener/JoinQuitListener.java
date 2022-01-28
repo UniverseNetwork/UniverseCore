@@ -15,10 +15,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class JoinQuitListener implements Listener {
+
+    Map<Player, String> map = new HashMap<>();
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
@@ -52,23 +53,36 @@ public class JoinQuitListener implements Listener {
                 switch (key) {
                     case "godMode": {
                         if (playerData.getConfig().getBoolean(player.getUniqueId() + ".godMode")) {
-                            player.setInvulnerable(true);
+                            if (player.hasPermission("universenetwork.god")) {
+                                player.setInvulnerable(true);
+                            } else {
+                                playerData.removePlayerData(player, key);
+                            }
                         }
                     }
                     case "flyMode": {
                         if (playerData.getConfig().getBoolean(player.getUniqueId() + ".flyMode")) {
-                            player.setAllowFlight(true);
-                            player.setFlying(true);
+                            if (player.hasPermission("universenetwork.fly")) {
+                                player.setAllowFlight(true);
+                                player.setFlying(true);
+                            } else {
+                                player.setAllowFlight(false);
+                                player.setFlying(false);
+                                playerData.removePlayerData(player, key);
+                            }
                         }
                     }
                 }
-                Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () -> Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray()) + " &7is &aON"), 10L);
+                Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () ->
+                        Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray()) + " &7is &aON"), 5L);
             }
         }
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
+        Player player = e.getPlayer();
+        map.remove(player);
         if (Config.getInstance().getBoolean(ConfigEnum.QENABLE)) {
             if (Config.getInstance().getBoolean(ConfigEnum.QCENTER)) {
                 List<String> a = Config.getInstance().getConfig().getStringList(ConfigEnum.QMSG.getPath());
