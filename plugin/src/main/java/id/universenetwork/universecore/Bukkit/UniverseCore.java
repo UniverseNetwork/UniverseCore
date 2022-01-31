@@ -69,9 +69,9 @@ public final class UniverseCore extends JavaPlugin {
         instance = this;
         this.loadMultiVersion();
         this.register();
-        this.smartDeleteCooldowns();
         this.confirmationManager = new ConfirmationManager(this);
         this.cooldownManager = new CooldownManager(this);
+        this.cooldownManager.smartDeleteCooldowns();
         this.onEnableMessage();
         this.getLogger().info("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
         this.getLogger().info("");
@@ -270,18 +270,6 @@ public final class UniverseCore extends JavaPlugin {
             e.printStackTrace();
         }
 
-    }
-
-    private void smartDeleteCooldowns() {
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(this, () -> {
-            for (UUID uuid : getCooldownManager().getCooldowns().rowKeySet()) {
-                for (String type : getCooldownManager().getCooldowns().row(uuid).keySet()) {
-                    if (getCooldownManager().getCooldowns().get(uuid, type) <= System.currentTimeMillis()) {
-                        getCooldownManager().getCooldowns().remove(uuid, type);
-                    }
-                }
-            }
-        }, 1, 1);
     }
 
     public void onEnableMessage() {

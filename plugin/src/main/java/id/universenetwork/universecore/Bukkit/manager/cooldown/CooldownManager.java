@@ -23,16 +23,6 @@ public class CooldownManager {
     public CooldownManager(UniverseCore core) {
         this.core = core;
         this.cooldowns = HashBasedTable.create();
-
-        Bukkit.getScheduler().scheduleSyncRepeatingTask(core, () -> {
-            for (UUID uuid : cooldowns.rowKeySet()) {
-                for (String type : cooldowns.row(uuid).keySet()) {
-                    if (cooldowns.get(uuid, type) <= System.currentTimeMillis()) {
-                        cooldowns.remove(uuid, type);
-                    }
-                }
-            }
-        }, 1, 1);
     }
 
     public Table<UUID, String, Long> getCooldowns() {
@@ -63,6 +53,18 @@ public class CooldownManager {
 
     private long calculateRemainder(Long expireTime) {
         return expireTime != null ? expireTime - System.currentTimeMillis() : Long.MIN_VALUE;
+    }
+
+    public void smartDeleteCooldowns() {
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(core, () -> {
+            for (UUID uuid : cooldowns.rowKeySet()) {
+                for (String type : cooldowns.row(uuid).keySet()) {
+                    if (cooldowns.get(uuid, type) <= System.currentTimeMillis()) {
+                        cooldowns.remove(uuid, type);
+                    }
+                }
+            }
+        }, 1, 1);
     }
 
     public void requestCooldown(Callback callback,String type, long delay, String permission, CommandSender sender, @Nullable List<String> warnings) {
