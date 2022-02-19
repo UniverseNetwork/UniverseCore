@@ -21,7 +21,7 @@ public class BroadCastCommand extends UNCommand {
                                  final @Argument(value = "message") @Greedy String message) {
 
         System.out.println(" ");
-        System.out.println(CenterMessage.CenteredMessage("§e§lAnnouncement"));
+        System.out.println(CenterMessage.centeredMessage1("§e§lAnnouncement"));
         System.out.println(" ");
         System.out.println(message);
         System.out.println(" ");

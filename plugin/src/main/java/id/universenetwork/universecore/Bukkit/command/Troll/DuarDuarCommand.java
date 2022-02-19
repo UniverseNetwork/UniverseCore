@@ -3,6 +3,7 @@ package id.universenetwork.universecore.Bukkit.command.Troll;
 import cloud.commandframework.annotations.Argument;
 import cloud.commandframework.annotations.CommandMethod;
 import cloud.commandframework.annotations.CommandPermission;
+import cloud.commandframework.annotations.specifier.Range;
 import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
@@ -26,7 +27,7 @@ public class DuarDuarCommand extends UNCommand {
     @CommandMethod("duarduar|uduarduar|dd|udd [target] [amount] [delay]")
     @CommandPermission("universenetwork.duarduar")
     public void duarduarCommand(final @NonNull CommandSender sender,
-                                final @NonNull @Argument(value = "amount", defaultValue = "1", suggestions = "amountL",description = "amount of lightning to be spawned") Integer amount,
+                                final @NonNull @Argument(value = "amount", defaultValue = "1", suggestions = "amountL",description = "amount of lightning to be spawned") @Range(min = "1", max = "10") Integer amount,
                                 final @NonNull @Argument(value = "delay", defaultValue = "1", description = "delay after 1 lightning spawn") Long delay,
                                 final @NonNull @Argument(value = "target", defaultValue = "self", suggestions = "players", description = "the players") String targetName) {
 
@@ -35,10 +36,10 @@ public class DuarDuarCommand extends UNCommand {
         boolean others = targets.size() > 1 || (sender instanceof Player && targets.doesNotContain((Player) sender));
         if (others && !Utils.checkPermission(sender, "duarduar", true)) return;
 
-        if (amount > 10) {
+        /*if (amount > 10) {
             sender.sendMessage("§cMaximal 10!");
             return;
-        }
+        }*/
 
         core.getConfirmationManager().requestConfirm(() -> {
             targets.stream().forEach(player -> {

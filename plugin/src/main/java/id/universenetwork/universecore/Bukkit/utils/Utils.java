@@ -72,11 +72,11 @@ public class Utils {
     }
 
     /**
-     * @param msg   the message
+     * @param text   the message
      * @return      ChatColor#translateAlternateColorCodes();
      */
-    public String colors(String msg) {
-        return ChatColor.translateAlternateColorCodes('&', msg);
+    public String colors(String text) {
+        return ChatColor.translateAlternateColorCodes('&', text);
     }
 
     /**

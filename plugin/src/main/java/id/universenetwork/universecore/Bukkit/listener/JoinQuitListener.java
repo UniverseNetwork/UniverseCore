@@ -28,7 +28,7 @@ public class JoinQuitListener implements Listener {
             if (Config.getInstance().getBoolean(ConfigEnum.JCENTER)) {
                 List<String> a = Config.getInstance().getConfig().getStringList(ConfigEnum.JMSG.getPath());
                 String b = StringUtils.join(a, "\n");
-                e.setJoinMessage(Utils.colors(CenterMessage.CenteredMessage(StringUtils.replaceEach(b,
+                e.setJoinMessage(Utils.colors(CenterMessage.centeredMessage1(StringUtils.replaceEach(b,
                         new String[]{"%player%"},
                         new String[]{e.getPlayer().getName()}))));
             } else {
@@ -56,6 +56,7 @@ public class JoinQuitListener implements Listener {
                             if (player.hasPermission("universenetwork.god")) {
                                 player.setInvulnerable(true);
                             } else {
+                                player.setInvulnerable(false);
                                 playerData.removePlayerData(player, key);
                             }
                         }
@@ -73,8 +74,12 @@ public class JoinQuitListener implements Listener {
                         }
                     }
                 }
-                Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () ->
-                        Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray()) + " &7is &aON"), 5L);
+                Object[] modeList = playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray();
+
+                if (modeList.length >= 1) {
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () ->
+                            Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(modeList) + " &7is &aON"), 5L);
+                }
             }
         }
     }
@@ -87,7 +92,7 @@ public class JoinQuitListener implements Listener {
             if (Config.getInstance().getBoolean(ConfigEnum.QCENTER)) {
                 List<String> a = Config.getInstance().getConfig().getStringList(ConfigEnum.QMSG.getPath());
                 String b = StringUtils.join(a, "\n");
-                e.setQuitMessage(Utils.colors(CenterMessage.CenteredMessage(StringUtils.replaceEach(b,
+                e.setQuitMessage(Utils.colors(CenterMessage.centeredMessage1(StringUtils.replaceEach(b,
                         new String[]{"%player%"},
                         new String[]{e.getPlayer().getName()}))));
             } else {

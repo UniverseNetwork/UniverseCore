@@ -10,7 +10,7 @@ public class CenterMessage {
 
     private final static int CENTER_PX = 154;
 
-    public static String CenteredMessage(String message){
+    public static String centeredMessage1(String message){
         String[] lines = ChatColor.translateAlternateColorCodes('&', message).split("\n", 40);
         StringBuilder returnMessage = new StringBuilder();
 

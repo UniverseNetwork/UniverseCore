@@ -195,9 +195,9 @@ public abstract class UNCommand {
 
         Bukkit.getOnlinePlayers().forEach(player -> players.add(player.getName()));
 
-        players.add("*");
-        players.add("@a");
-        players.add("@all");
+        players.add("*".toString());
+        players.add("@a".toString());
+        players.add("@all".toString());
         return players.stream().filter(s -> s.startsWith(context)).collect(Collectors.toList());
     }
 

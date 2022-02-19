@@ -21,6 +21,7 @@ import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
 import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
+import id.universenetwork.universecore.Bukkit.manager.helpme.HelpMeData;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,13 +29,17 @@ import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Tag;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.UUID;
+import java.util.List;
 import java.util.function.Function;
 
 import static net.kyori.adventure.text.Component.text;
@@ -48,15 +53,13 @@ public final class UniverseCore extends JavaPlugin {
     private PaperCommandManager<CommandSender> manager;
     @Getter
     private MinecraftHelp<CommandSender> minecraftHelp;
-
     @Setter
     private ConfirmationManager confirmationManager;
-
+    private CooldownManager cooldownManager;
+    private HelpMeData helpMeData;
     private MultiVersion multiVersion;
 
     private static UniverseCore instance;
-
-    private CooldownManager cooldownManager;
 
     public static UniverseCore getInstance() {
         return UniverseCore.instance;
@@ -71,6 +74,7 @@ public final class UniverseCore extends JavaPlugin {
         this.register();
         this.confirmationManager = new ConfirmationManager(this);
         this.cooldownManager = new CooldownManager(this);
+        this.helpMeData = new HelpMeData(this);
         this.cooldownManager.smartDeleteCooldowns();
         this.onEnableMessage();
         this.getLogger().info("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
@@ -161,12 +165,8 @@ public final class UniverseCore extends JavaPlugin {
         Bukkit.getLogger().info("[UniverseCore] Dependencies loaded!");*/
 
         this.commandRegister();
-        Utils.registerListener(
-                new JoinQuitListener(),
-                new ToggleDropListener(),
-                new FreezeListener(),
-                new GodListener()
-                );
+        this.registerListener("id.universenetwork.universecore.Bukkit.manager.helpme.gui");
+        this.registerListener("id.universenetwork.universecore.Bukkit.listener");
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -182,7 +182,6 @@ public final class UniverseCore extends JavaPlugin {
                 try {
                     Class<?> commandClass = Class.forName(classInfo.getName());
                     this.parseAnnotationCommands(commandClass.newInstance());
-                    this.getLogger().info("Registered command: " + commandClass.getSimpleName() + " #" + manager.getCommands().size());
                 } catch (Exception e) {
                     this.getLogger().severe("Failed loading command class: " + classInfo.getName());
                     e.printStackTrace();
@@ -191,6 +190,28 @@ public final class UniverseCore extends JavaPlugin {
             this.getLogger().info("Finish! " + manager.getCommands().size() + " Commands has been registered.");
         } catch (IOException e) {
             this.getLogger().severe("Failed loading command classes!");
+            e.printStackTrace();
+        }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public void registerListener(String path) {
+        List<String> registered = new ArrayList<>();
+        this.getLogger().info("Registering listeners...");
+        try {
+            ClassPath classPath = ClassPath.from(this.getClass().getClassLoader());
+            for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(path)) {
+                try {
+                    Class<?> listenerClass = Class.forName(classInfo.getName());
+                    Bukkit.getServer().getPluginManager().registerEvents((Listener) listenerClass.newInstance(), this);
+                    registered.add(listenerClass.getName());
+                } catch (Exception e) {
+                    this.getLogger().severe("Failed loading Listener class: " + classInfo.getName());
+                    e.printStackTrace();
+                }
+            }
+            this.getLogger().info("Finish! " + registered.size() + " Listeners has been registered.");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

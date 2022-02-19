@@ -27,7 +27,7 @@ public class CovidCommand extends UNCommand {
             return;
         }
 
-        TargetsCallback targets = this.getTargets(sender, targetName);
+        TargetsCallback targets = this.getTargets(sender, targetName.toString());
         if (targets.notifyIfEmpty()) {
             return;
         }
