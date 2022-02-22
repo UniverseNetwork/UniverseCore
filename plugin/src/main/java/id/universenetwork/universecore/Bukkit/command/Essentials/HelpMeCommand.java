@@ -34,8 +34,11 @@ public class HelpMeCommand extends UNCommand {
             if (player.hasPermission("universenetwork.staff.helpme")) {
                 Utils.sendMsg(sender, helpMsg);
                 HelpMeAcceptedGui gui = new HelpMeAcceptedGui();
+                gui.callback(() -> {
+                    gui.openGui(player, gui.getUuid());
+                }, gui.guiCanSkip(player, sender));
                 gui.openGui(player, gui.getUuid());
-                core.getHelpMeData().setStaffInProgress(player.getUniqueId(), sender.getUniqueId());
+                core.getHelpMeData().setStaffInProgress(sender.getUniqueId(), player.getUniqueId());
             }
         }
 

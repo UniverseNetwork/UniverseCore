@@ -27,8 +27,8 @@ public class HelpMeData {
         this.helpList.put(uuid, message);
     }
 
-    public void setStaffInProgress(UUID staffUUID, UUID playerUUID) {
-        this.staffInProgress.put(staffUUID, playerUUID);
+    public void setStaffInProgress(UUID playerUUID, UUID staffUUID) {
+        this.staffInProgress.put(playerUUID, staffUUID);
     }
 
     public void setStaffOnline(UUID uuid, Player player) {
