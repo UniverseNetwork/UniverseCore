@@ -14,14 +14,13 @@ import com.google.common.base.Joiner;
 import com.google.common.reflect.ClassPath;
 import id.universenetwork.multiversion.MultiVersion;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
-import id.universenetwork.universecore.Bukkit.listener.*;
+import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
 import id.universenetwork.universecore.Bukkit.manager.confirmation.ConfirmationManager;
 import id.universenetwork.universecore.Bukkit.manager.cooldown.CooldownManager;
 import id.universenetwork.universecore.Bukkit.manager.file.Config;
 import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
 import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
 import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
-import id.universenetwork.universecore.Bukkit.manager.helpme.HelpMeData;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,11 +28,10 @@ import lombok.SneakyThrows;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Tag;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -56,7 +54,6 @@ public final class UniverseCore extends JavaPlugin {
     @Setter
     private ConfirmationManager confirmationManager;
     private CooldownManager cooldownManager;
-    private HelpMeData helpMeData;
     private MultiVersion multiVersion;
 
     private static UniverseCore instance;
@@ -74,7 +71,6 @@ public final class UniverseCore extends JavaPlugin {
         this.register();
         this.confirmationManager = new ConfirmationManager(this);
         this.cooldownManager = new CooldownManager(this);
-        this.helpMeData = new HelpMeData(this);
         this.cooldownManager.smartDeleteCooldowns();
         this.onEnableMessage();
         this.getLogger().info("Took " + (System.currentTimeMillis() - start) + "ms to enable!");
@@ -165,8 +161,9 @@ public final class UniverseCore extends JavaPlugin {
         Bukkit.getLogger().info("[UniverseCore] Dependencies loaded!");*/
 
         this.commandRegister();
-        this.registerListener("id.universenetwork.universecore.Bukkit.manager.helpme.gui");
-        this.registerListener("id.universenetwork.universecore.Bukkit.listener");
+        this.registerListener("id.universenetwork.universecore.Bukkit.manager.helpme.gui", "HelpMeAcceptedGui");
+        this.registerListener("id.universenetwork.universecore.Bukkit.listener", null);
+        /*Utils.registerListener(new GuiListener());*/
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -195,12 +192,16 @@ public final class UniverseCore extends JavaPlugin {
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public void registerListener(String path) {
+    public void registerListener(String path, @Nullable String blackListClass) {
         List<String> registered = new ArrayList<>();
         this.getLogger().info("Registering listeners...");
         try {
             ClassPath classPath = ClassPath.from(this.getClass().getClassLoader());
             for (ClassPath.ClassInfo classInfo : classPath.getTopLevelClassesRecursive(path)) {
+                if (blackListClass != null && classInfo.getName().contains(blackListClass)) {
+                    continue;
+                }
+
                 try {
                     Class<?> listenerClass = Class.forName(classInfo.getName());
                     Bukkit.getServer().getPluginManager().registerEvents((Listener) listenerClass.newInstance(), this);

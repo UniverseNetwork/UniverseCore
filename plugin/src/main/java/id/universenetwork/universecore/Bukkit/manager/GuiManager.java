@@ -29,7 +29,7 @@ public class GuiManager implements Listener, InventoryHolder {
 
     private Material filterItem;
 
-    protected UniverseCore core;
+    protected UniverseCore core = UniverseCore.getInstance();
 
     public GuiManager(int invSize, String name) {
         this.uuid = UUID.randomUUID();
@@ -149,6 +149,18 @@ public class GuiManager implements Listener, InventoryHolder {
 
     public interface CustomAction {
         void onClick(InventoryClickEvent event);
+    }
+
+    public Inventory clone() {
+        try {
+            Inventory inv = (Inventory) super.clone();
+            for (int i = 0; i < inventory.getSize(); i++) {
+                inv.setItem(i, inventory.getItem(i).clone());
+            }
+            return inv;
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
     }
 
 }
