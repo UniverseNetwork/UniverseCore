@@ -34,14 +34,14 @@ public class WhereIsCommand extends UNCommand {
 
         targets.stream().findFirst().ifPresent(player -> {
             List<String> a = MessageFile.message.getConfig().getStringList(MessageEnum.WHEREISMSG.getPath());
-            String b = StringUtils.join(a, "\n");
+            String b = StringUtils.join(Utils.colorsArray(a), "\n");
             if (sender instanceof Player) {
                 String c = Utils.colors(StringUtils.replaceEach(b,
                         new String[]{"%player%", "%world%", "%x%", "%y%", "%z%", "%yaw%", "%pitch%"},
                         new String[]{player.getName(), Objects.requireNonNull(player.getLocation().getWorld()).getName(),
                                 String.valueOf(player.getLocation().getX()), String.valueOf(player.getLocation().getY()), String.valueOf(player.getLocation().getZ()),
                                 String.valueOf(player.getLocation().getYaw()), String.valueOf(player.getLocation().getPitch())}));
-                TextComponent hover = TextComponent.builder().content(b)
+                TextComponent hover = TextComponent.builder().content(c)
                         .hoverEvent(HoverEvent.showText(TextComponent.of(Utils.colors("&aClick to teleport!"))))
                         .clickEvent(ClickEvent.runCommand("/tp " + player.getName())).build();
                 TextAdapter.sendMessage(sender, hover);
