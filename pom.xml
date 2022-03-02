@@ -6,7 +6,7 @@
 
     <groupId>id.universenetwork</groupId>
     <artifactId>UniverseCore</artifactId>
-    <version>0.4</version>
+    <version>0.5</version>
     <packaging>pom</packaging>
 
     <name>UniverseCore</name>

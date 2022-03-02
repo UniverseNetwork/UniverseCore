@@ -7,7 +7,7 @@
     <parent>
         <groupId>id.universenetwork</groupId>
         <artifactId>UniverseCore</artifactId>
-        <version>0.4</version>
+        <version>0.5</version>
     </parent>
 
     <artifactId>MV-1_12</artifactId>
