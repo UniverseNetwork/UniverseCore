@@ -17,10 +17,7 @@ import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.listener.SuggestionListener;
 import id.universenetwork.universecore.Bukkit.manager.confirmation.ConfirmationManager;
 import id.universenetwork.universecore.Bukkit.manager.cooldown.CooldownManager;
-import id.universenetwork.universecore.Bukkit.manager.file.Config;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
-import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
-import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
+import id.universenetwork.universecore.Bukkit.manager.file.*;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import lombok.Getter;
 import lombok.Setter;
@@ -88,6 +85,7 @@ public final class UniverseCore extends JavaPlugin {
         MessageFile.getInstance().saveConfig();
         SuggestionBlocker.getInstance().saveConfig();
         PlayerData.getInstance().saveConfig();
+        CustomPressurePlateAction.getInstance().saveConfig();
     }
 
     @SneakyThrows
@@ -96,6 +94,7 @@ public final class UniverseCore extends JavaPlugin {
         MessageFile.message.saveDefaultConfig();
         SuggestionBlocker.message.saveDefaultConfig();
         PlayerData.config.saveDefaultConfig();
+        CustomPressurePlateAction.file.saveDefaultConfig();
 
         Function<CommandTree<CommandSender>, CommandExecutionCoordinator<CommandSender>> executionCoordinatorFunction = CommandExecutionCoordinator.simpleCoordinator();
         Function<CommandSender, CommandSender> mapperFunction = Function.identity();

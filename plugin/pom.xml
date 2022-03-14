@@ -150,6 +150,7 @@
                     <include>message.yml</include>
                     <include>playerdata.yml</include>
                     <include>suggestion-blocker.yml</include>
+                    <include>CustomPressurePlateAction.yml</include>
                 </includes>
             </resource>
         </resources>

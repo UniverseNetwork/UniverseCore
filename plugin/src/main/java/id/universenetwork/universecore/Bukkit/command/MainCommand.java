@@ -8,10 +8,7 @@ import cloud.commandframework.annotations.suggestions.Suggestions;
 import cloud.commandframework.context.CommandContext;
 import id.universenetwork.universecore.Bukkit.enums.MessageEnum;
 import id.universenetwork.universecore.Bukkit.manager.UNCommand;
-import id.universenetwork.universecore.Bukkit.manager.file.Config;
-import id.universenetwork.universecore.Bukkit.manager.file.MessageFile;
-import id.universenetwork.universecore.Bukkit.manager.file.PlayerData;
-import id.universenetwork.universecore.Bukkit.manager.file.SuggestionBlocker;
+import id.universenetwork.universecore.Bukkit.manager.file.*;
 import id.universenetwork.universecore.Bukkit.utils.Utils;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,6 +53,7 @@ public class MainCommand extends UNCommand {
                         MessageFile.getInstance().reload();
                         SuggestionBlocker.getInstance().reload();
                         PlayerData.getInstance().reload();
+                        CustomPressurePlateAction.getInstance().reload();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
