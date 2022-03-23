@@ -83,7 +83,7 @@ public class PingCommand extends UNCommand {
 
     public String getPing(int ping) {
         String msg;
-        if (ping <= 0) {
+        if (ping < 0) {
             msg = "&b" + ping;
         } else if (ping <= 30) {
             msg = "&a" + ping;
@@ -101,7 +101,7 @@ public class PingCommand extends UNCommand {
 
     public String getStatus(int ping) {
         String msg;
-        if (ping <= 0) {
+        if (ping < 0) {
             msg = "&bLoading your ping! (Please wait).";
         } else if (ping <= 30) {
             msg = "&2Awesome Ping!";
