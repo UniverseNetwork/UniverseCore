@@ -45,40 +45,42 @@ public class JoinQuitListener implements Listener {
             return;
         }
 
-        Iterator<String> list = playerData.getSection(player.getUniqueId().toString()).getKeys(false).iterator();
+        if (Config.getInstance().getBoolean(ConfigEnum.SPAWJ)){
+            Iterator<String> list = playerData.getSection(player.getUniqueId().toString()).getKeys(false).iterator();
 
-        if (list.hasNext()) {
-            String key = list.next();
-            if (playerData.hasPlayerData(player, key)) {
-                switch (key) {
-                    case "godMode": {
-                        if (playerData.getConfig().getBoolean(player.getUniqueId() + ".godMode")) {
-                            if (player.hasPermission("universenetwork.god")) {
-                                player.setInvulnerable(true);
-                            } else {
-                                player.setInvulnerable(false);
-                                playerData.removePlayerData(player, key);
+            if (list.hasNext()) {
+                String key = list.next();
+                if (playerData.hasPlayerData(player, key)) {
+                    switch (key) {
+                        case "godMode": {
+                            if (playerData.getConfig().getBoolean(player.getUniqueId() + ".godMode")) {
+                                if (player.hasPermission("universenetwork.god")) {
+                                    player.setInvulnerable(true);
+                                } else {
+                                    player.setInvulnerable(false);
+                                    playerData.removePlayerData(player, key);
+                                }
+                            }
+                        }
+                        case "flyMode": {
+                            if (playerData.getConfig().getBoolean(player.getUniqueId() + ".flyMode")) {
+                                if (player.hasPermission("universenetwork.fly")) {
+                                    player.setAllowFlight(true);
+                                    player.setFlying(true);
+                                } else {
+                                    player.setAllowFlight(false);
+                                    player.setFlying(false);
+                                    playerData.removePlayerData(player, key);
+                                }
                             }
                         }
                     }
-                    case "flyMode": {
-                        if (playerData.getConfig().getBoolean(player.getUniqueId() + ".flyMode")) {
-                            if (player.hasPermission("universenetwork.fly")) {
-                                player.setAllowFlight(true);
-                                player.setFlying(true);
-                            } else {
-                                player.setAllowFlight(false);
-                                player.setFlying(false);
-                                playerData.removePlayerData(player, key);
-                            }
-                        }
-                    }
-                }
-                Object[] modeList = playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray();
+                    Object[] modeList = playerData.getSection(player.getUniqueId().toString()).getKeys(false).toArray();
 
-                if (modeList.length >= 1) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () ->
-                            Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(modeList) + " &7is &aON"), 5L);
+                    if (modeList.length >= 1) {
+                        Bukkit.getScheduler().scheduleSyncDelayedTask(UniverseCore.getInstance(), () ->
+                                Utils.sendMsg(player, "&7Your &e" + Joiner.on(", ").join(modeList) + " &7is &aON"), 5L);
+                    }
                 }
             }
         }

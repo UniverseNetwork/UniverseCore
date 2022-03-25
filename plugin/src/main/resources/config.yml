@@ -21,3 +21,6 @@ QuitMessage:
     - ' '
     - '&e%player% &cQuit &bthe server!'
     - ' '
+
+Player:
+  set-player-ability-when-join: false

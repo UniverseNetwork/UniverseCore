@@ -9,7 +9,8 @@ public enum ConfigEnum {
     JMSG("JoinMessage.Message"),
     QENABLE("QuitMessage.Enabled"),
     QCENTER("QuitMessage.Centered"),
-    QMSG("QuitMessage.Message");
+    QMSG("QuitMessage.Message"),
+    SPAWJ("Player.set-player-ability-when-join");
 
     private final String path;
 
