@@ -3,8 +3,7 @@
 UniverseCore is a plugin for UniverseNetwork Minecraft server.
 
 # Features
-  - Essentials
-    - Join/Quit Message
+  - Join/Quit Message
 
 # Commands
   - Essentials
